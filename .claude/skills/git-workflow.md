@@ -29,13 +29,13 @@ main/master          # 生产分支（受保护）
 
 #### 1.2 分支命名规范
 
-| 分支类型 | 命名格式 | 示例 |
-|----------|----------|------|
-| 功能分支 | feature/功能简述 | feature/user-login |
-| Bug 修复 | bugfix/问题简述 | bugfix/login-null-pointer |
-| 发布分支 | release/版本号 | release/v1.2.0 |
-| 热修复 | hotfix/问题简述 | hotfix/security-patch |
-| 实验分支 | experiment/实验内容 | experiment/new-cache |
+| 分支类型   | 命名格式            | 示例                        |
+| ------ | --------------- | ------------------------- |
+| 功能分支   | feature/功能简述    | feature/user-login        |
+| Bug 修复 | bugfix/问题简述     | bugfix/login-null-pointer |
+| 发布分支   | release/版本号     | release/v1.2.0            |
+| 热修复    | hotfix/问题简述     | hotfix/security-patch     |
+| 实验分支   | experiment/实验内容 | experiment/new-cache      |
 
 #### 1.3 分支操作指南
 
@@ -70,27 +70,29 @@ git push origin --delete feature/user-login
 #### 2.1 Conventional Commits 格式
 
 ```
-<type>(<scope>): <subject>
+<emoji> <type>(<scope>): <subject>
 
 <body>
 
 <footer>
 ```
 
+依据 `git-commit-emoji` skills替换<emoji>
+
 #### 2.2 Type 类型
 
-| 类型 | 说明 | 示例 |
-|------|------|------|
-| feat | 新功能 | feat(user): 添加用户登录功能 |
-| fix | Bug 修复 | fix(order): 修复订单金额计算错误 |
-| docs | 文档更新 | docs(readme): 更新安装说明 |
-| style | 格式调整（不影响代码逻辑） | style(format): 代码格式化 |
-| refactor | 重构（非新功能非 bug 修复） | refactor(user): 重构用户服务 |
-| perf | 性能优化 | perf(cache): 优化缓存策略 |
-| test | 测试相关 | test(user): 添加用户测试用例 |
-| chore | 构建/工具/配置 | chore(deps): 升级依赖版本 |
-| ci | CI 配置 | ci(github): 更新 GitHub Actions |
-| revert | 回滚 | revert: 回滚"feat: xxx" |
+| 类型       | 说明               | 示例                            |
+| -------- | ---------------- | ----------------------------- |
+| feat     | 新功能              | feat(user): 添加用户登录功能          |
+| fix      | Bug 修复           | fix(order): 修复订单金额计算错误        |
+| docs     | 文档更新             | docs(readme): 更新安装说明          |
+| style    | 格式调整（不影响代码逻辑）    | style(format): 代码格式化          |
+| refactor | 重构（非新功能非 bug 修复） | refactor(user): 重构用户服务        |
+| perf     | 性能优化             | perf(cache): 优化缓存策略           |
+| test     | 测试相关             | test(user): 添加用户测试用例          |
+| chore    | 构建/工具/配置         | chore(deps): 升级依赖版本           |
+| ci       | CI 配置            | ci(github): 更新 GitHub Actions |
+| revert   | 回滚               | revert: 回滚"feat: xxx"         |
 
 #### 2.3 提交示例
 

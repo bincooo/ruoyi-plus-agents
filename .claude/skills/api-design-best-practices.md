@@ -6,6 +6,7 @@ description: 当进行 RESTful API 设计、编写 OpenAPI/Swagger 文档、管�
 # API 设计最佳实践技能 (API Design Best Practices)
 
 ## 适用场景
+
 - RESTful API 设计
 - OpenAPI/Swagger 文档
 - API 版本管理
@@ -16,6 +17,7 @@ description: 当进行 RESTful API 设计、编写 OpenAPI/Swagger 文档、管�
 ### RESTful API 设计原则
 
 #### 1. 资源命名规范
+
 ```
 # ✅ 推荐：使用名词复数，小写，连字符
 GET  /api/v1/users
@@ -29,15 +31,17 @@ GET  /api/v1/userRoles    # 驼峰
 ```
 
 #### 2. HTTP 方法使用
-| 方法 | 用途 | 幂等性 |
-|------|------|--------|
-| GET | 查询资源 | 是 |
-| POST | 创建资源 | 否 |
-| PUT | 更新资源 (全量) | 是 |
-| PATCH | 更新资源 (部分) | 否 |
-| DELETE | 删除资源 | 是 |
+
+| 方法     | 用途        | 幂等性 |
+| ------ | --------- | --- |
+| GET    | 查询资源      | 是   |
+| POST   | 创建资源      | 否   |
+| PUT    | 更新资源 (全量) | 是   |
+| PATCH  | 更新资源 (部分) | 否   |
+| DELETE | 删除资源      | 是   |
 
 #### 3. 状态码使用
+
 ```java
 // 2xx 成功
 200 OK          // 请求成功
@@ -60,82 +64,219 @@ GET  /api/v1/userRoles    # 驼峰
 ## 统一响应格式
 
 ### 响应体结构
+
 ```java
 @Data
-public class ApiResponse<T> {
-    
+public class R<T> {
+
     /**
      * 状态码
      */
-    private Integer code;
-    
+    private int code;
+
     /**
      * 消息
      */
-    private String message;
-    
+    private String msg;
+
     /**
      * 数据
      */
     private T data;
+
     
     /**
-     * 时间戳
+     * 构建成功响应结果
+     *
+     * @param <T> 响应数据的泛型类型
+     * @return 成功响应结果对象
      */
-    private Long timestamp;
-    
-    public static <T> ApiResponse<T> ok() {
-        return ok(null);
+    public static <T> R<T> ok() {
+        return restResult(null, SUCCESS, "操作成功");
     }
-    
-    public static <T> ApiResponse<T> ok(T data) {
-        ApiResponse<T> resp = new ApiResponse<>();
-        resp.setCode(200);
-        resp.setMessage("success");
-        resp.setData(data);
-        resp.setTimestamp(System.currentTimeMillis());
-        return resp;
+
+    /**
+     * 构建成功响应结果（带业务数据）
+     *
+     * @param data 业务数据
+     * @param <T>  响应数据的泛型类型
+     * @return 成功响应结果对象
+     */
+    public static <T> R<T> ok(T data) {
+        return restResult(data, SUCCESS, "操作成功");
     }
-    
-    public static <T> ApiResponse<T> error(String message) {
-        return error(500, message);
+
+    /**
+     * 构建成功响应结果（明确指定业务数据）
+     *
+     * @param data 业务数据
+     * @param <T>  响应数据的泛型类型
+     * @return 成功响应结果对象
+     */
+    public static <T> R<T> data(T data) {
+        return restResult(data, SUCCESS, "操作成功");
     }
-    
-    public static <T> ApiResponse<T> error(Integer code, String message) {
-        ApiResponse<T> resp = new ApiResponse<>();
-        resp.setCode(code);
-        resp.setMessage(message);
-        resp.setTimestamp(System.currentTimeMillis());
-        return resp;
+
+    /**
+     * 构建成功响应结果（自定义提示信息）
+     *
+     * @param msg 自定义提示信息
+     * @param <T> 响应数据的泛型类型
+     * @return 成功响应结果对象
+     */
+    public static <T> R<T> ok(String msg) {
+        return restResult(null, SUCCESS, msg);
     }
+
+    /**
+     * 构建成功响应结果（自定义提示信息+业务数据）
+     *
+     * @param msg  自定义提示信息
+     * @param data 业务数据
+     * @param <T>  响应数据的泛型类型
+     * @return 成功响应结果对象
+     */
+    public static <T> R<T> ok(String msg, T data) {
+        return restResult(data, SUCCESS, msg);
+    }
+
+    /**
+     * 构建失败响应结果
+     *
+     * @param <T> 响应数据的泛型类型
+     * @return 失败响应结果对象
+     */
+    public static <T> R<T> fail() {
+        return restResult(null, ERROR, "操作失败");
+    }
+
+    /**
+     * 构建失败响应结果（自定义提示信息）
+     *
+     * @param msg 自定义提示信息
+     * @param <T> 响应数据的泛型类型
+     * @return 失败响应结果对象
+     */
+    public static <T> R<T> fail(String msg) {
+        return restResult(null, ERROR, msg);
+    }
+
+    /**
+     * 构建失败响应结果（带业务数据）
+     *
+     * @param data 业务数据
+     * @param <T>  响应数据的泛型类型
+     * @return 失败响应结果对象
+     */
+    public static <T> R<T> fail(T data) {
+        return restResult(data, ERROR, "操作失败");
+    }
+
+    /**
+     * 构建失败响应结果（自定义提示信息+业务数据）
+     *
+     * @param msg  自定义提示信息
+     * @param data 业务数据
+     * @param <T>  响应数据的泛型类型
+     * @return 失败响应结果对象
+     */
+    public static <T> R<T> fail(String msg, T data) {
+        return restResult(data, ERROR, msg);
+    }
+
+    /**
+     * 构建失败响应结果（自定义状态码+提示信息）
+     *
+     * @param code 自定义状态码
+     * @param msg  自定义提示信息
+     * @param <T>  响应数据的泛型类型
+     * @return 失败响应结果对象
+     */
+    public static <T> R<T> fail(int code, String msg) {
+        return restResult(null, code, msg);
+    }
+
+    /**
+     * 构建警告响应结果
+     *
+     * @param msg 自定义提示信息
+     * @param <T> 响应数据的泛型类型
+     * @return 警告响应结果对象
+     */
+    public static <T> R<T> warn(String msg) {
+        return restResult(null, HttpStatus.WARN, msg);
+    }
+
+    /**
+     * 构建警告响应结果（自定义提示信息+业务数据）
+     *
+     * @param msg  自定义提示信息
+     * @param data 业务数据
+     * @param <T>  响应数据的泛型类型
+     * @return 警告响应结果对象
+     */
+    public static <T> R<T> warn(String msg, T data) {
+        return restResult(data, HttpStatus.WARN, msg);
+    }
+
+    /**
+     * 核心构建方法
+     *
+     * @param data 业务数据
+     * @param code 响应状态码
+     * @param msg  提示信息
+     * @param <T>  响应数据的泛型类型
+     * @return 响应结果对象
+     */
+    private static <T> R<T> restResult(T data, int code, String msg) {
+        R<T> r = new R<>();
+        r.setCode(code);
+        r.setData(data);
+        r.setMsg(msg);
+        return r;
+    }
+
+    /**
+     * 判断响应结果是否为失败
+     *
+     * @param ret 响应结果对象
+     * @param <T> 响应数据的泛型类型
+     * @return true=失败，false=成功
+     */
+    public static <T> Boolean isError(R<T> ret) {
+        return !isSuccess(ret);
+    }
+
+    /**
+     * 判断响应结果是否为成功
+     *
+     * @param ret 响应结果对象
+     * @param <T> 响应数据的泛型类型
+     * @return true=成功，false=失败
+     */
+    public static <T> Boolean isSuccess(R<T> ret) {
+        return ret != null && SUCCESS == ret.getCode();
+    }
+
 }
 ```
 
 ### 分页响应
+
 ```java
 @Data
 public class PageResult<T> {
-    
+
     /**
      * 数据列表
      */
-    private List<T> list;
-    
+    private List<T> rows;
+
     /**
      * 总数
      */
     private Long total;
-    
-    /**
-     * 当前页
-     */
-    private Integer pageNum;
-    
-    /**
-     * 每页大小
-     */
-    private Integer pageSize;
-    
+
     public static <T> PageResult<T> of(List<T> list, Long total, 
                                         Integer pageNum, Integer pageSize) {
         PageResult<T> result = new PageResult<>();
@@ -151,6 +292,7 @@ public class PageResult<T> {
 ## API 文档规范
 
 ### OpenAPI 3.0 示例
+
 ```yaml
 openapi: 3.0.3
 info:
@@ -201,7 +343,7 @@ paths:
           description: 未认证
         '403':
           description: 无权限
-    
+
     post:
       summary: 创建用户
       operationId: createUser
@@ -244,7 +386,7 @@ components:
         createTime:
           type: string
           format: date-time
-    
+
     CreateUserRequest:
       type: object
       required:
@@ -264,7 +406,7 @@ components:
         email:
           type: string
           format: email
-    
+
     ApiResponse:
       type: object
       properties:
@@ -277,7 +419,7 @@ components:
         timestamp:
           type: integer
           format: int64
-    
+
     UserPageResult:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
@@ -285,7 +427,7 @@ components:
           properties:
             data:
               $ref: '#/components/schemas/PageResult'
-    
+
     PageResult:
       type: object
       properties:
@@ -310,6 +452,7 @@ components:
 ## Controller 示例
 
 ### 标准 RESTful Controller
+
 ```java
 @RestController
 @RequestMapping("/api/v1/users")
@@ -326,7 +469,7 @@ public class UserController {
             @Parameter(description = "当前页") @RequestParam(defaultValue = "1") Integer pageNum,
             @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") Integer pageSize,
             @Parameter(description = "用户名") @RequestParam(required = false) String username) {
-        
+
         PageQuery query = PageQuery.of(pageNum, pageSize)
             .addCondition("username", username);
         return R.ok(userService.pageList(query));
@@ -370,18 +513,21 @@ public class UserController {
 ## API 版本管理
 
 ### URL 版本化 (推荐)
+
 ```
 GET /api/v1/users
 GET /api/v2/users
 ```
 
 ### Header 版本化
+
 ```
 GET /users
 Accept-Version: v1
 ```
 
 ### 参数版本化
+
 ```
 GET /users?version=v1
 ```
@@ -389,6 +535,7 @@ GET /users?version=v1
 ## 安全规范
 
 ### 认证方式
+
 ```java
 // JWT Bearer Token
 Authorization: Bearer <token>
@@ -398,6 +545,7 @@ X-API-Key: <key>
 ```
 
 ### 权限控制
+
 ```java
 // 方法级权限
 @SaCheckPermission("system:user:add")
@@ -413,6 +561,7 @@ X-API-Key: <key>
 ```
 
 ### 限流保护
+
 ```java
 // 接口限流
 @RateLimiter(value = 10, timeout = 60)  // 60 秒内最多 10 次
@@ -425,6 +574,7 @@ public R<Void> login(@RequestBody LoginDTO dto) {
 ## API 设计检查清单
 
 ### 设计审查
+
 - [ ] 资源命名是否使用名词复数
 - [ ] HTTP 方法使用是否正确
 - [ ] 状态码使用是否恰当
@@ -432,12 +582,14 @@ public R<Void> login(@RequestBody LoginDTO dto) {
 - [ ] 错误信息是否清晰
 
 ### 文档审查
+
 - [ ] OpenAPI 文档是否完整
 - [ ] 请求参数是否有说明
 - [ ] 响应示例是否提供
 - [ ] 错误码是否列举
 
 ### 安全审查
+
 - [ ] 是否实现认证机制
 - [ ] 是否实现授权控制
 - [ ] 是否有限流保护
@@ -446,6 +598,7 @@ public R<Void> login(@RequestBody LoginDTO dto) {
 ## 常见错误处理
 
 ### 错误响应格式
+
 ```json
 {
   "code": 400,
@@ -466,6 +619,7 @@ public R<Void> login(@RequestBody LoginDTO dto) {
 ```
 
 ### 全局异常处理
+
 ```java
 @RestControllerAdvice
 public class GlobalExceptionHandler {
