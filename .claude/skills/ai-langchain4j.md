@@ -1,3 +1,8 @@
+---
+name: ai-langchain4j
+description: 当需要通过 LangChain4j 集成大模型能力时使用 —— RAG 检索增强、向量数据库、AI Agent、智能对话（ruoyi-modules/ruoyi-ai、ruoyi-common-ai）。
+---
+
 # AI LangChain4j - AI 大模型集成
 
 ## 职责范围
@@ -374,10 +379,10 @@ public class AiController {
      * 简单对话
      */
     @PostMapping("/chat")
-    public AjaxResult chat(@RequestBody Map<String, String> request) {
+    public R<chat(@RequestBody Map<String, String> request) {
         String message = request.get("message");
         String response = aiChatService.chat(message);
-        return AjaxResult.success().put("response", response);
+        return R.ok().put("response", response);
     }
 
     /**
@@ -411,21 +416,21 @@ public class AiController {
      * 上传文档
      */
     @PostMapping("/rag/ingest")
-    public AjaxResult ingestDocument(@RequestParam("file") MultipartFile file) {
+    public R<ingestDocument(@RequestParam("file") MultipartFile file) {
         ragService.ingestDocument(file);
-        return AjaxResult.success("文档导入成功");
+        return R.ok("文档导入成功");
     }
 
     /**
      * RAG 检索问答
      */
     @PostMapping("/rag/query")
-    public AjaxResult ragQuery(@RequestBody Map<String, Object> request) {
+    public R<ragQuery(@RequestBody Map<String, Object> request) {
         String query = (String) request.get("query");
         Integer maxResults = (Integer) request.getOrDefault("maxResults", 3);
 
         String response = ragService.ragQuery(query, maxResults);
-        return AjaxResult.success().put("response", response);
+        return R.ok().put("response", response);
     }
 }
 ```

@@ -1,6 +1,17 @@
 # Skills 技能库全景
 
-> RuoYi-Vue-Plus AI 开发助手 - 专业技能库
+> RuoYi-Vue-Plus 6.X AI 开发助手 - 专业技能库（bell-plus 前端 + UniApp 移动端）
+
+---
+
+## 技术栈速查（修正于 2026-09-17）
+
+| 层 | 实际技术 |
+|------|------|
+| 后端 | Spring Boot + MyBatis-Plus + Sa-Token + Redisson + HikariCP，包名 `org.dromara.*`，框架版本 6.0.0 |
+| 前端 (bell-plus) | Vue 3 + TypeScript + Vite + Pinia + **antdv-next** + **vxe-table** + vben-admin 封装 |
+| 移动端 (UniApp) | UniApp 3.x + Vue 3 + UView Plus + wxCropper |
+| 架构 | Controller → Service → Mapper（三层，无 DAO 层） |
 
 ---
 
@@ -10,13 +21,13 @@
 
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
-| **crud-development** | 四层架构 CRUD 开发规范 | CRUD、增删改查、新增功能 |
+| **crud-development** | 三层架构 CRUD 开发规范 | CRUD、增删改查、新增功能 |
 | **api-development** | RESTful API 设计规范 | API、接口、Controller |
+| **api-design-best-practices** | API 设计最佳实践（OpenAPI、版本管理） | API 设计、OpenAPI、接口规范 |
 | **database-ops** | 数据库操作、建表、字典注解 | 数据库、SQL、建表、Mapper |
 | **backend-annotations** | 后端注解使用规范 | 注解、@Transactional、@DataScope |
 | **error-handler** | 异常处理规范 | 异常、Exception、错误处理 |
 | **springboot-best-practices** | Spring Boot 企业级实践 | Spring Boot、配置、启动 |
-| **java-architect** | Java 架构设计模式 | 架构、设计模式、重构 |
 
 ---
 
@@ -25,17 +36,16 @@
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
 | **vue-best-practices** | Vue 3 Composition API、Pinia、Vite | Vue、前端、组件、Pinia |
-| **ui-bc** | Element Plus 封装组件使用 | Element Plus、UI 组件、表单 |
+| **ui-bc** | antdv-next + vxe-table 组件封装（bell-plus） | UI 组件、表单、表格、弹窗、antdv |
 | **store-bc** | Pinia 状态管理 | 状态管理、Store、Pinia |
 
 ---
 
-### 📱 跨平台开发（3 个）
+### 📱 跨平台开发（2 个）
 
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
-| **ui-mobile** | WDI 组件库（移动端） | 移动端、H5、小程序 |
-| **store-mobile** | 移动端状态管理 | 移动端状态、小程序状态 |
+| **ui-mobile** | UniApp 移动端 UI 规范（UView Plus） | 移动端、H5、小程序、UniApp |
 | **uniape-platform** | 跨平台条件编译 | 跨平台、条件编译、多端 |
 
 ---
@@ -45,7 +55,7 @@
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
 | **security-guard** | Sa-Token 认证授权 | 安全、登录、认证、权限 |
-| **spring-security-guide** | Spring Security 完整指南 | Spring Security、过滤器 |
+| **spring-security-guide** | 认证授权概念与 Sa-Token 实践 | 认证、授权、Token、过滤器 |
 | **data-permission** | 数据权限设计 | 数据权限、@DataScope |
 
 ---
@@ -63,17 +73,16 @@
 
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
-| **performance-optimization** | SQL 调优、索引、JVM 调优 | 性能、优化、慢查询 |
-| **jvm-tuning** | JVM 调优指南 | JVM、GC、内存 |
+| **performance-optimization** | SQL 调优、索引、连接池调优 | 性能、优化、慢查询 |
+| **performance-doctor** | 性能问题排查指南 | 性能优化、SQL 调优 |
 
 ---
 
-### 🧪 测试（2 个）
+### 🧪 测试（1 个）
 
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
 | **testing-best-practices** | JUnit 5、Mockito、Vitest | 测试、单元测试、Mock |
-| **e2e-testing** | Playwright E2E 测试 | E2E、端到端、集成测试 |
 
 ---
 
@@ -81,7 +90,7 @@
 
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
-| **devops-ci-cd** | GitHub Actions、Docker、K8s | CI/CD、部署、Docker |
+| **devops-ci-cd** | CI/CD、Docker 部署 | CI/CD、部署、Docker |
 | **github-workflow-automation** | GitHub 自动化 | GitHub、PR、Issue、Release |
 
 ---
@@ -90,9 +99,9 @@
 
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
-| **ai-llm-integration** | RAG、向量数据库、LangChain4j | AI、LLM、RAG、向量 |
+| **ai-llm-integration** | RAG、向量数据库、LLM 集成 | AI、LLM、RAG、向量 |
+| **ai-langchain4j** | AI 大模型集成（LangChain4j） | AI、LLM、LangChain4j、RAG、Agent |
 | **multi-agent-workflow** | 多智能体协作 | 多智能体、Agent、协作 |
-| **prompt-optimization** | 提示词优化 | 提示词、Prompt、优化 |
 
 ---
 
@@ -110,8 +119,8 @@
 
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
-| **ruoyi-development** | RuoYi-Vue-Plus/Pro规范 | RuoYi、若依、框架 |
-| **workflow-engine** | WarmFlow 工作流引擎 | 工作流、流程、审批 |
+| **ruoyi-development** | RuoYi-Vue-Plus 6.X 规范 | RuoYi、若依、框架 |
+| **workflow-engine** | 工作流引擎开发 | 工作流、流程、审批 |
 
 ---
 
@@ -124,36 +133,35 @@
 
 ---
 
-### 📦 业务集成（4 个）
+### 📦 业务集成（3 个）
 
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
 | **payment-integration** | 支付功能集成（微信/支付宝） | 支付、微信支付、支付宝、退款 |
 | **wechat-integration** | 微信生态集成 | 微信、小程序、公众号、模板消息 |
 | **file-oss-management** | 文件上传与 OSS 管理 | OSS、文件上传、对象存储、图片处理 |
-| **ai-langchain4j** | AI 大模型集成（LangChain4j） | AI、LLM、LangChain4j、RAG、Agent |
 
 ---
 
-### 🔍 质量保障（4 个）
+### 🔍 质量保障（3 个）
 
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
 | **bug-detective** | Bug 排查与问题定位 | Bug、排查、调试、日志分析 |
-| **performance-doctor** | 性能优化指南 | 性能优化、SQL 调优、JVM 调优 |
 | **code-patterns** | 代码模式库与最佳实践 | 代码模式、重构、反模式 |
 | **security-guard** | 安全认证授权（Sa-Token） | 安全、登录、权限、认证 |
 
 ---
 
-### 📋 项目管理与方法论（5 个）
+### 📋 项目管理与方法论（6 个）
 
 | 技能 | 职责 | 触发关键词 |
 |------|------|------------|
-| **architecture-design** | 架构设计模式 | 架构设计、DDD、分层架构 |
+| **architecture-design** | 架构设计模式（三层架构） | 架构设计、分层架构 |
 | **tech-decision** | 技术决策与评估 | 技术选型、架构决策、ADR |
 | **project-navigator** | 项目导航与新人指南 | 项目结构、模块介绍、新人指南 |
 | **git-workflow** | Git 工作流规范 | Git、分支管理、PR、提交规范 |
+| **git-commit-emoji** | Git 提交emoji | Git、分支、PR 标题类别凸现 |
 | **brainstorm** | 头脑风暴与创意发散 | 头脑风暴、创意发散、问题拆解 |
 
 ---
@@ -164,20 +172,22 @@
 |------|------|
 | 后端开发 | 7 |
 | 前端开发 | 3 |
-| 移动端 | 3 |
+| 移动端 | 2 |
 | 安全与权限 | 3 |
 | 数据存储 | 2 |
 | 性能优化 | 2 |
-| 测试 | 2 |
+| 测试 | 1 |
 | DevOps | 2 |
 | AI 与多智能体 | 3 |
 | 架构与方法论 | 3 |
 | 框架与平台 | 2 |
 | 多租户与缓存 | 2 |
-| 业务集成 | 4 |
-| 质量保障 | 4 |
-| 项目管理与方法论 | 5 |
-| **总计** | **42** |
+| 业务集成 | 3 |
+| 质量保障 | 3 |
+| 项目管理与方法论 | 6 |
+| **总计** | **43** |
+
+> 注：security-guard 在「安全与权限」和「质量保障」两个分类下重复引用，实际文件为 43 个（不含索引自身为 42 个技能文件）。
 
 ---
 
@@ -185,14 +195,14 @@
 
 ```
 1.  ai-llm-integration.md
-2.  ai-langchain4j.md                 [新增]
+2.  ai-langchain4j.md
 3.  api-design-best-practices.md
 4.  api-development.md
-5.  architecture-design.md            [新增]
+5.  architecture-design.md
 6.  backend-annotations.md
-7.  brainstorm.md                     [新增]
-8.  bug-detective.md                  [新增]
-9.  code-patterns.md                  [新增]
+7.  brainstorm.md
+8.  bug-detective.md
+9.  code-patterns.md
 10. code-review.md
 11. crud-development.md
 12. data-permission.md
@@ -200,34 +210,37 @@
 14. ddd-domain-driven-design.md
 15. devops-ci-cd.md
 16. error-handler.md
-17. file-oss-management.md            [新增]
-18. git-workflow.md                   [新增]
+17. file-oss-management.md
+18. git-workflow.md
 19. github-workflow-automation.md
-20. java-architect.md
-21. multi-agent-workflow.md
-22. mybatis-plus-best-practices.md
-23. payment-integration.md            [新增]
-24. performance-doctor.md             [新增]
-25. performance-optimization.md
-26. project-navigator.md              [新增]
-27. redis-cache-guide.md
-28. redis-cache.md
-29. ruoyi-development.md
-30. security-guard.md
-31. spring-security-guide.md
-32. springboot-best-practices.md
-33. store-bc.md
-34. tech-decision.md                  [新增]
-35. technical-writing.md
-36. tenant-management.md
-37. testing-best-practices.md
-38. ui-bc.md
-39. ui-mobile.md
-40. uniape-platform.md
-41. vue-best-practices.md
-42. wechat-integration.md             [新增]
-43. workflow-engine.md
+20. git-commit-emoji.md
+21. java-architect.md
+22. multi-agent-workflow.md
+23. mybatis-plus-best-practices.md
+24. payment-integration.md
+25. performance-doctor.md
+26. performance-optimization.md
+27. project-navigator.md
+28. redis-cache-guide.md
+29. redis-cache.md
+30. ruoyi-development.md
+31. security-guard.md
+32. spring-security-guide.md
+33. springboot-best-practices.md
+34. store-bc.md
+35. tech-decision.md
+36. technical-writing.md
+37. tenant-management.md
+38. testing-best-practices.md
+39. ui-bc.md
+40. ui-mobile.md
+41. uniape-platform.md
+42. vue-best-practices.md
+43. wechat-integration.md
+44. workflow-engine.md
 ```
+
+> **已移除的幻影条目**（索引曾列出但无对应文件）：`jvm-tuning`、`e2e-testing`、`store-mobile`、`prompt-optimization`、`ui-design-mobile`。如需这些能力，请先创建技能文件再登记。
 
 ---
 
@@ -257,7 +270,7 @@ if (input.includes('CRUD') || input.includes('增删改查')) {
 复杂任务可组合多个技能：
 
 ```
-使用 crud-development + api-development + security-guard 
+使用 crud-development + api-development + security-guard
 开发完整的用户管理模块
 ```
 
@@ -305,10 +318,9 @@ if (input.includes('CRUD') || input.includes('增删改查')) {
 
 - 相关技能 1
 - 相关技能 2
-
 ```
 
 ---
 
-*更新时间：2026-04-06*  
-*RuoYi-Vue-Plus AI 开发助手*
+*更新时间：2026-09-17*
+*RuoYi-Vue-Plus 6.X AI 开发助手*

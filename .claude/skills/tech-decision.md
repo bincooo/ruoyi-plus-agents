@@ -1,3 +1,8 @@
+---
+name: tech-decision
+description: 当进行技术选型、架构决策或方案评估时使用 —— 系统化决策方法论与 ADR 文档模板。
+---
+
 # Tech Decision - 技术决策指南
 
 ## 职责范围

@@ -1,3 +1,8 @@
+---
+name: error-handler
+description: 当实现异常处理时使用 —— 异常分类、自定义异常、全局异常处理器、统一错误响应（R<T>）。
+---
+
 # Error Handler - 异常处理规范
 
 ## 职责范围
@@ -78,34 +83,34 @@ public class GlobalExceptionHandler {
 
     // 处理业务异常
     @ExceptionHandler(ServiceException.class)
-    public AjaxResult handleServiceException(ServiceException e) {
+    public R<handleServiceException(ServiceException e) {
         log.error("业务异常：{}", e.getMessage());
-        return AjaxResult.error(e.getCode(), e.getMessage());
+        return R.fail(e.getCode(), e.getMessage());
     }
 
     // 处理参数校验异常
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public AjaxResult handleValidationException(MethodArgumentNotValidException e) {
+    public R<handleValidationException(MethodArgumentNotValidException e) {
         BindingResult result = e.getBindingResult();
         String message = result.getFieldError() != null 
             ? result.getFieldError().getDefaultMessage() 
             : "参数校验失败";
         log.warn("参数校验异常：{}", message);
-        return AjaxResult.error(ErrorCode.BAD_REQUEST, message);
+        return R.fail(ErrorCode.BAD_REQUEST, message);
     }
 
     // 处理权限异常
     @ExceptionHandler(NotPermissionException.class)
-    public AjaxResult handlePermissionException(NotPermissionException e) {
+    public R<handlePermissionException(NotPermissionException e) {
         log.warn("权限异常：{}", e.getMessage());
-        return AjaxResult.error(ErrorCode.FORBIDDEN, "没有操作权限");
+        return R.fail(ErrorCode.FORBIDDEN, "没有操作权限");
     }
 
     // 处理其他异常
     @ExceptionHandler(Exception.class)
-    public AjaxResult handleException(Exception e) {
+    public R<handleException(Exception e) {
         log.error("系统异常", e);
-        return AjaxResult.error(ErrorCode.INTERNAL_ERROR, "系统繁忙，请稍后再试");
+        return R.fail(ErrorCode.INTERNAL_ERROR, "系统繁忙，请稍后再试");
     }
 }
 ```
@@ -157,9 +162,9 @@ public class UserDisabledException extends UserException {
 ```java
 // ✅ 正确：记录完整异常栈
 @ExceptionHandler(Exception.class)
-public AjaxResult handleException(Exception e) {
+public R<handleException(Exception e) {
     log.error("系统异常：{}", e.getMessage(), e);  // 第三个参数记录栈
-    return AjaxResult.error("系统繁忙");
+    return R.fail("系统繁忙");
 }
 
 // ✅ 正确：记录关键上下文
@@ -282,29 +287,14 @@ try {
 
 ## 统一响应格式
 
+RuoYi-Vue-Plus 6.X 统一使用 `org.dromara.common.core.domain.R<T>`（泛型响应体，含 code/msg/data），不再自定义 AjaxResult：
+
 ```java
-@Data
-public class AjaxResult {
-    private Integer code;
-    private String msg;
-    private Object data;
-
-    public static AjaxResult success() {
-        return new AjaxResult(ErrorCode.SUCCESS, "操作成功", null);
-    }
-
-    public static AjaxResult success(Object data) {
-        return new AjaxResult(ErrorCode.SUCCESS, "操作成功", data);
-    }
-
-    public static AjaxResult error(String msg) {
-        return new AjaxResult(ErrorCode.INTERNAL_ERROR, msg, null);
-    }
-
-    public static AjaxResult error(Integer code, String msg) {
-        return new AjaxResult(code, msg, null);
-    }
-}
+// org.dromara.common.core.domain.R<T>
+R<Void> ok = R.ok();                        // 成功，无数据
+R<UserVo> okData = R.ok(userVo);            // 成功，携带数据
+R<Void> fail = R.fail("操作失败");            // 失败，携带消息
+R<Void> failCode = R.fail(500, "系统异常");   // 失败，自定义状态码
 ```
 
 ---
@@ -349,13 +339,13 @@ try {
 ```java
 // ❌ 错误：暴露数据库结构
 catch (SQLException e) {
-    return AjaxResult.error("SQL 错误：" + e.getMessage());
+    return R.fail("SQL 错误：" + e.getMessage());
 }
 
 // ✅ 正确：友好提示
 catch (SQLException e) {
     log.error("数据库错误", e);
-    return AjaxResult.error("系统繁忙，请稍后再试");
+    return R.fail("系统繁忙，请稍后再试");
 }
 ```
 

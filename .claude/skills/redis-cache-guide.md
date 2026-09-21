@@ -1,3 +1,8 @@
+---
+name: redis-cache-guide
+description: 当实现 Redis 缓存策略时使用 —— 分布式锁、会话管理、缓存穿透防护（Redisson）。
+---
+
 # Redis 缓存与分布式锁技能 (Redis Cache & Distributed Lock)
 
 ## 适用场景

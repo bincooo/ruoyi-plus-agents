@@ -1,3 +1,8 @@
+---
+name: payment-integration
+description: 当集成微信/支付宝支付时使用 —— 支付回调处理、订单状态管理、退款流程。
+---
+
 # Payment Integration - 支付功能集成
 
 ## 职责范围

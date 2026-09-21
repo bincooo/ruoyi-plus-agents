@@ -1,3 +1,8 @@
+---
+name: code-patterns
+description: 当审查或重构代码、识别优秀代码模式、最佳实践与反模式（Anti-Patterns）时使用。
+---
+
 # Code Patterns - 代码模式库
 
 ## 职责范围

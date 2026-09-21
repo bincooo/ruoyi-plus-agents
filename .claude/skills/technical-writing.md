@@ -1,3 +1,8 @@
+---
+name: technical-writing
+description: 当编写技术文档时使用 —— API 文档、架构文档、README、用户操作手册。
+---
+
 # 技术文档写作技能 (Technical Writing)
 
 ## 适用场景
@@ -197,7 +202,7 @@ cd repo
 mvn clean install -DskipTests
 
 # 3. 配置数据库
-# 编辑 application-druid.yml
+# 编辑 application-dev.yml（数据源使用 HikariCP）
 
 # 4. 启动应用
 cd ruoyi-admin

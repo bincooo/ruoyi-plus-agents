@@ -1,5 +1,5 @@
 {
-  "model": "qwen3.5-plus",
+  "model": "z-ai/glm-5.2[1m]",
   "temperature": 0.1,
   "max_tokens": 4096,
   "auto_approve_large_changes": true,
@@ -12,22 +12,22 @@
   },
   "project_framework": "ruoyi-vue-plus",
   "framework_config": {
-    "version": "5.x",
+    "version": "6.x",
     "backend": {
       "language": "Java",
       "jdk_version": "17+",
-      "framework": "Spring Boot 3.2+",
+      "framework": "Spring Boot 4.1+",
       "orm": "MyBatis-Plus",
       "auth": "Sa-Token",
       "cache": "Redis"
     },
     "frontend": {
       "framework": "Vue 3",
-      "ui_library": "Element Plus",
-      "admin_template": "Vben Admin"
+      "ui_library": "antdv-Next",
+      "admin_template": "bell-plus"
     },
     "database": {
-      "primary": "MySQL 8.0",
+      "primary": "postgres 16.0+",
       "cache": "Redis 6.0+"
     },
     "key_features": [

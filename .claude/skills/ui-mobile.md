@@ -1,3 +1,8 @@
+---
+name: ui-mobile
+description: 当开发 UniApp 移动端 UI 组件时使用，适用于 H5、小程序、App 多端场景。
+---
+
 # UI Mobile - 移动端开发规范（WDI 组件库）
 
 ## 职责范围
@@ -500,9 +505,8 @@ module.exports = {
 
 ## 相关文件
 
-- [ui-design-mobile.md](./ui-design-mobile.md) - 移动端设计规范
-- [store-mobile.md](./store-mobile.md) - 移动端状态管理
 - [uniape-platform.md](./uniape-platform.md) - 跨平台条件编译
+- [vue-best-practices.md](./vue-best-practices.md) - Vue 3 开发最佳实践
 
 ---
 

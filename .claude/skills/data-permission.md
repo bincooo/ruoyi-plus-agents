@@ -1,3 +1,8 @@
+---
+name: data-permission
+description: 当实现数据权限时使用 —— @DataScope 注解、数据范围配置、SQL 拦截器等行级权限控制。
+---
+
 # Data Permission - 数据权限设计
 
 ## 职责范围
@@ -440,7 +445,7 @@ public List<SysUser> selectUserList(SysUser user) {
 ## 相关文件
 
 - [security-guard.md](./security-guard.md) - Sa-Token 认证授权
-- [spring-security-guide.md](./spring-security-guide.md) - Spring Security 指南
+- [spring-security-guide.md](./spring-security-guide.md) - 认证授权与 Sa-Token 实践
 - [backend-annotations.md](./backend-annotations.md) - 后端注解使用规范
 
 ---

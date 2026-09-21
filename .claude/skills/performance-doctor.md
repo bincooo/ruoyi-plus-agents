@@ -1,3 +1,8 @@
+---
+name: performance-doctor
+description: 当排查性能问题时使用 —— SQL 调优、缓存策略、JVM、并发、接口响应慢的根因定位。
+---
+
 # Performance Doctor - 性能优化指南
 
 ## 职责范围
@@ -506,14 +511,14 @@ public class ApiController {
     private RateLimiterService rateLimiterService;
 
     @GetMapping("/api/data")
-    public AjaxResult getData(HttpServletRequest request) {
+    public R<getData(HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         
         if (!rateLimiterService.tryAcquire(ip, 1, 60)) {
-            return AjaxResult.error("请求过于频繁，请稍后再试");
+            return R.fail("请求过于频繁，请稍后再试");
         }
         
-        return AjaxResult.success(service.getData());
+        return R.ok(service.getData());
     }
 }
 ```

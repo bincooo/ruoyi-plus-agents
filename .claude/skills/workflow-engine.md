@@ -1,3 +1,8 @@
+---
+name: workflow-engine
+description: 当构建业务流程自动化或审批流系统时使用 —— WarmFlow 工作流引擎设计与集成。
+---
+
 # 工作流引擎开发技能 (Workflow Engine)
 
 ## 适用场景

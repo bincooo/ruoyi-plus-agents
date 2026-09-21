@@ -1,3 +1,8 @@
+---
+name: api-development
+description: 当设计或开发 RESTful API 接口/Controller 时使用，遵循 RuoYi-Vue-Plus API 规范。
+---
+
 # API开发技能
 
 ## 适用场景

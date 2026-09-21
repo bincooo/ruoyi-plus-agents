@@ -1,3 +1,8 @@
+---
+name: tenant-management
+description: 当构建 SaaS 多租户功能时使用 —— TenantEntity、租户数据隔离、租户过滤（ruoyi-common-tenant）。
+---
+
 # 多租户管理技能 (Tenant Management)
 
 ## 适用场景

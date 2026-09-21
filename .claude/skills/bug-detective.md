@@ -1,3 +1,8 @@
+---
+name: bug-detective
+description: 当排查调试 Bug、异常或非预期行为时使用 —— 日志分析、问题定位、系统化根因诊断。
+---
+
 # Bug Detective - Bug 排查指南
 
 ## 职责范围
@@ -75,7 +80,7 @@ logging:
   level:
     root: INFO
     org.dromara: DEBUG
-    com.ruoyi: DEBUG
+    org.dromara: DEBUG
     org.springframework.web: DEBUG
     org.dromara.common.mybatis.core.mapper: DEBUG  # MyBatis SQL 调试
 
@@ -165,31 +170,31 @@ public class GlobalExceptionHandler {
      * 处理业务异常
      */
     @ExceptionHandler(ServiceException.class)
-    public AjaxResult handleServiceException(ServiceException e) {
+    public R<handleServiceException(ServiceException e) {
         // 业务异常只记录警告日志
         log.warn("业务异常：code={}, message={}", e.getCode(), e.getMessage());
-        return AjaxResult.error(e.getCode(), e.getMessage());
+        return R.fail(e.getCode(), e.getMessage());
     }
 
     /**
      * 处理数据库异常
      */
     @ExceptionHandler({BadSqlGrammarException.class, DataIntegrityViolationException.class})
-    public AjaxResult handleDatabaseException(Exception e) {
+    public R<handleDatabaseException(Exception e) {
         // 数据库异常记录 ERROR 日志
         log.error("数据库异常", e);
-        return AjaxResult.error("数据库操作失败");
+        return R.fail("数据库操作失败");
     }
 
     /**
      * 处理通用异常
      */
     @ExceptionHandler(Exception.class)
-    public AjaxResult handleException(Exception e, HttpServletRequest request) {
+    public R<handleException(Exception e, HttpServletRequest request) {
         // 记录完整堆栈和请求信息
         log.error("系统异常，URI: {}, Method: {}", 
             request.getRequestURI(), request.getMethod(), e);
-        return AjaxResult.error("系统繁忙，请稍后再试");
+        return R.fail("系统繁忙，请稍后再试");
     }
 }
 ```

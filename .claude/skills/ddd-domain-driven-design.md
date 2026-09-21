@@ -1,3 +1,8 @@
+---
+name: ddd-domain-driven-design
+description: 当使用 DDD 架构复杂业务系统时使用 —— 聚合、限界上下文、领域事件、微服务边界划分。
+---
+
 # DDD 领域驱动设计技能 (Domain-Driven Design)
 
 ## 适用场景
@@ -101,7 +106,7 @@
 
 ### 实体类
 ```java
-package com.ruoyi.order.domain.entity;
+package org.dromara.order.domain.entity;
 
 /**
  * 订单实体 - 聚合根
@@ -180,7 +185,7 @@ public class OrderItem {
 
 ### 值对象
 ```java
-package com.ruoyi.order.domain.valueobject;
+package org.dromara.order.domain.valueobject;
 
 /**
  * 金额值对象 - 不可变
@@ -251,7 +256,7 @@ public class OrderId {
 
 ### 领域服务
 ```java
-package com.ruoyi.order.domain.service;
+package org.dromara.order.domain.service;
 
 /**
  * 订单领域服务
@@ -326,7 +331,7 @@ public class OrderDomainService {
 
 ### 仓储接口
 ```java
-package com.ruoyi.order.domain.repository;
+package org.dromara.order.domain.repository;
 
 /**
  * 订单仓储接口 - 定义在领域层
@@ -357,7 +362,7 @@ public interface ProductRepository {
 
 ### 仓储实现
 ```java
-package com.ruoyi.order.infrastructure.repository;
+package org.dromara.order.infrastructure.repository;
 
 /**
  * 订单仓储实现 - 基础设施层
@@ -416,7 +421,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
 ### 领域事件
 ```java
-package com.ruoyi.order.domain.event;
+package org.dromara.order.domain.event;
 
 /**
  * 订单创建事件
@@ -507,7 +512,7 @@ public class OrderEventHandlers {
 
 ### ACL 实现
 ```java
-package com.ruoyi.order.interfaces.adapter;
+package org.dromara.order.interfaces.adapter;
 
 /**
  * 防腐层 - 隔离外部上下文
@@ -524,7 +529,7 @@ public class InventoryAdapter {
     public boolean checkAvailability(List<ProductQuantity> products) {
         InventoryCheckRequest request = new InventoryCheckRequest();
         request.setProducts(products.stream()
-            .map(p -> com.ruoyi.inventory.api.ProductQuantity.builder()
+            .map(p -> org.dromara.inventory.api.ProductQuantity.builder()
                 .productId(p.getProductId())
                 .quantity(p.getQuantity())
                 .build())

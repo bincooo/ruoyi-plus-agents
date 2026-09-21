@@ -1,3 +1,8 @@
+---
+name: security-guard
+description: 当实现认证授权功能时使用 —— Sa-Token 登录认证、RBAC 权限、Token 管理（ruoyi-common-satoken）。
+---
+
 # 安全开发技能 (Security Guard)
 
 ## 适用场景

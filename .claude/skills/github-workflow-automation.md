@@ -1,3 +1,8 @@
+---
+name: github-workflow-automation
+description: 当通过 GitHub Actions 实现自动化时使用 —— CI/CD、PR/Issue 自动处理、Release 发布。
+---
+
 # GitHub Workflow 自动化技能 (GitHub Workflow Automation)
 
 ## 适用场景
@@ -177,9 +182,9 @@ jobs:
           const { data: files } = await github.rest.pulls.listFiles({ owner, repo, pull_number: number });
           
           const teamMap = {
-            'src/main/java/com/ruoyi/system/': 'system-team',
-            'src/main/java/com/ruoyi/common/': 'core-team',
-            'ruoyi-ui/': 'frontend-team'
+            'RuoYi-Vue-Plus/ruoyi-modules/ruoyi-system/': 'system-team',
+            'RuoYi-Vue-Plus/ruoyi-common/': 'core-team',
+            'bell-plus/': 'frontend-team'
           };
           
           for (const file of files) {

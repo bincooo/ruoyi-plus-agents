@@ -1,3 +1,8 @@
+---
+name: code-review
+description: 当代码提交前审查、PR 审查或代码质量与规范检查时使用。
+---
+
 # 代码审查技能 (Code Review)
 
 ## 适用场景
@@ -154,7 +159,7 @@ log.debug("用户信息：userId={}, name={}", user.getId(), user.getName());
 ## RuoYi-Vue-Plus 特定检查项
 
 ### 1. 包名规范
-- [ ] 必须以 `org.dromara` 或 `com.ruoyi` 开头
+- [ ] 必须以 `org.dromara` 开头
 - [ ] 包名层次清晰
 
 ### 2. 实体类规范

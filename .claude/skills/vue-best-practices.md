@@ -1,3 +1,8 @@
+---
+name: vue-best-practices
+description: 当进行 Vue 3 + TypeScript 开发时使用 —— Composition API、Pinia、Vite、antdv-next（bell-plus 前端）。
+---
+
 # Vue 3 最佳实践技能 (Vue Best Practices)
 
 ## 适用场景
@@ -6,12 +11,12 @@
 - 使用 Composition API、Pinia、Vite 技术栈
 
 ## 核心技术栈
-- **Vue**: 3.x
-- **TypeScript**: 5.x
-- **Vite**: 5.x
-- **Pinia**: 2.x
+- **Vue**: 3.5.x
+- **TypeScript**: 5.9.x
+- **Vite**: 7.x
+- **Pinia**: 3.x
 - **Vue Router**: 4.x
-- **Element Plus**: 2.x (如使用)
+- **UI 组件库**: antdv-next 1.5.x（本项目 bell-plus 使用，非 Element Plus）
 
 ## Composition API 规范
 

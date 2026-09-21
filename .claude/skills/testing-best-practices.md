@@ -1,3 +1,8 @@
+---
+name: testing-best-practices
+description: 当编写测试时使用 —— JUnit 5/Mockito 单元测试、集成测试、Vitest/E2E 测试。
+---
+
 # 测试开发技能 (Testing Best Practices)
 
 ## 适用场景

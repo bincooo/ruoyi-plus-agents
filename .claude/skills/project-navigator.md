@@ -1,3 +1,8 @@
+---
+name: project-navigator
+description: 当新人入职或需要项目导航时使用 —— 模块结构、核心流程、关键类图介绍。
+---
+
 # Project Navigator - 项目导航指南
 
 ## 职责范围
@@ -57,64 +62,47 @@ ruoyi/
 └── pom.xml                       # 父 POM
 ```
 
-#### 1.2 前端目录结构
+#### 1.2 前端目录结构（bell-plus）
+
+> bell-plus 基于 vben-admin 架子，使用 Vue 3 + TypeScript + Vite + Pinia + antdv-next + vxe-table。目录以实际为准，下为典型布局。
 
 ```
-ruoyi-ui/
+bell-plus/
 ├── src/
-│   ├── api/                     # API 接口
-│   │   ├── system/             # 系统管理 API
-│   │   │   ├── user.js         # 用户管理
-│   │   │   ├── role.js         # 角色管理
-│   │   │   └── menu.js         # 菜单管理
-│   │   └── modules/            # 业务模块 API
+│   ├── api/                     # API 接口（按后端模块组织）
+│   │   ├── system/             # 系统管理 API（含 model/ 类型定义）
+│   │   │   ├── user.ts
+│   │   │   ├── role.ts
+│   │   │   └── menu.ts
+│   │   └── ...                  # 其他业务模块 API
 │   │
-│   ├── assets/                  # 静态资源
-│   │   ├── images/             # 图片
-│   │   ├── styles/             # 样式
-│   │   └── svg/                # SVG 图标
+│   ├── components/              # 封装组件
+│   │   ├── vxe-table/          # VxeGrid 表格封装 + useTableQuery
+│   │   ├── modal/              # useVbenModal 弹窗封装
+│   │   ├── table/              # OptionsTag / SearchButtonGroup 等
+│   │   ├── global/             # 全局组件（ApiSwitch / form 字段封装）
+│   │   └── access/             # 权限组件（useAccess）
 │   │
-│   ├── components/              # 公共组件
-│   │   ├── RTable/             # 表格组件
-│   │   ├── RForm/              # 表单组件
-│   │   ├── RDialog/            # 对话框组件
-│   │   └── RUpload/            # 上传组件
-│   │
-│   ├── layout/                  # 布局组件
-│   │   ├── Header.vue          # 顶部导航
-│   │   ├── Sidebar.vue         # 侧边栏
-│   │   └── TagsView.vue        # 标签页
+│   ├── layouts/                 # 布局组件
+│   │   └── basic.vue
 │   │
 │   ├── router/                  # 路由配置
-│   │   └── index.js
 │   │
-│   ├── store/                   # 状态管理（Pinia）
-│   │   ├── modules/
-│   │   │   ├── user.js         # 用户状态
-│   │   │   ├── app.js          # 应用状态
-│   │   │   └── permission.js   # 权限状态
-│   │   └── index.js
-│   │
-│   ├── utils/                   # 工具函数
-│   │   ├── request.js          # Axios 封装
-│   │   ├── auth.js             # 认证工具
-│   │   └── permission.js       # 权限工具
+│   ├── store/                   # Pinia 状态管理
 │   │
 │   ├── views/                   # 页面组件
-│   │   ├── system/             # 系统管理页面
-│   │   │   ├── user/
-│   │   │   │   ├── index.vue   # 用户列表
-│   │   │   │   └── form.vue    # 用户表单
-│   │   │   ├── role/
-│   │   │   └── menu/
-│   │   └── modules/            # 业务模块页面
+│   │   ├── system/             # 系统管理页面（user/role/menu/...）
+│   │   └── ...
 │   │
-│   ├── App.vue                  # 根组件
-│   └── main.js                  # 入口文件
+│   ├── utils/                   # 工具函数（dict / request / popup 等）
+│   ├── locales/                 # i18n
+│   ├── styles/                  # 样式（antdv-next 主题定制）
+│   ├── app.vue                  # 根组件
+│   └── bootstrap.ts             # 应用启动入口（注册 antdv-next 样式等）
 │
 ├── public/
 ├── package.json
-└── vite.config.js
+└── vite.config.ts
 ```
 
 ### 2. 核心模块详解
@@ -343,16 +331,16 @@ java -jar ruoyi-admin/target/ruoyi-admin.jar
 mvn dependency:tree
 
 # 前端命令
-cd ruoyi-ui
+cd bell-plus
 
-# 安装依赖
-npm install
+# 安装依赖 (pnpm)
+pnpm install
 
 # 开发模式运行
-npm run dev
+pnpm run dev
 
 # 生产构建
-npm run build
+pnpm run build
 ```
 
 #### 5.2 代码生成
@@ -376,10 +364,10 @@ ruoyi:
   name: RuoYi
   
   # 版本
-  version: 5.X.X
+  version: 6.0.0
   
   # 版权年份
-  copyrightYear: 2024
+  copyrightYear: 2026
   
   # 实例演示开关（演示环境用）
   demo:

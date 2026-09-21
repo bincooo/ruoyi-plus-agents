@@ -1,565 +1,329 @@
-# UI Components - Element Plus 组件封装规范
+---
+name: ui-bc
+description: 当开发 bell-plus 前端 UI 时使用 —— antdv-next 组件、vxe-table 表格、useVbenModal 弹窗、字典标签。
+---
+
+# UI Components - antdv-next + vxe-table 组件封装规范
 
 ## 职责范围
 
-规范 RuoYi-Vue-Plus 项目中 Element Plus 组件的使用和封装，包括通用组件开发、表单组件、表格组件等最佳实践。
+规范 RuoYi-Vue-Plus（bell-plus 前端）中 **antdv-next**（Ant Design Vue Next）、**vxe-table** 表格、以及基于 **vben-admin** 的 `@/components` 封装组件的使用与二次封装，涵盖表单、表格、弹窗、字典标签等常见场景。
+
+> ⚠️ 本项目前端为 Vue 3 + TypeScript + Vite + Pinia + **antdv-next**（不是 Element Plus）。表格基于 **vxe-table**，弹窗基于 vben 的 `useVbenModal`。组件通过 `@antdv-next/auto-import-resolver` 自动按需导入，`a-*` 标签可直接使用；需要类型或具名组件时从 `antdv-next` 显式 import。
 
 ---
 
 ## 核心规范
 
-### 1. 组件封装原则
+### 1. 组件来源与导入
 
-#### 1.1 单一职责原则
+| 用途 | 来源 | 示例 |
+|------|------|------|
+| 基础 UI（Button/Popconfirm/Space/Spin/Switch 等） | `antdv-next` | `import { Popconfirm, Space, Spin } from 'antdv-next'` |
+| 表单基础 | `antdv-next` | `import { Form, FormItem } from 'antdv-next'`；类型 `import type { FormInstance } from 'antdv-next'` |
+| 表单封装组件 | `@/components/global/form` | `FormInput`, `FormSelect`, `FormInputNumber`, `FormTextArea`（具名导入） |
+| 表格 | `@/components/vxe-table` + `vxe-table` | `VxeGrid`, `withDefaultVxeGridOptions`, `useTableQuery`, `resolveQueryFormValues` |
+| 弹窗 Hook | `@/components` | `useVbenModal` |
+| 字典 | `@/utils/dict` | `getDictOptions(DictEnum)` |
+| i18n | `@/locales` | `$t('pages.common.edit')` |
+| 表单校验类型 | `@/types/form` | `import type { AntdFormRules } from '@/types/form'` |
 
-```vue
-<!-- ✅ 正确：组件职责单一 -->
-<!-- UserTable.vue - 只负责用户表格展示 -->
-<template>
-  <el-table :data="userList" v-bind="$attrs">
-    <el-table-column prop="username" label="用户名" />
-    <el-table-column prop="email" label="邮箱" />
-    <el-table-column label="操作">
-      <el-button @click="handleEdit">编辑</el-button>
-    </el-table-column>
-  </el-table>
-</template>
+### 2. 组件封装原则
 
-<!-- ✅ 正确：搜索组件独立 -->
-<!-- UserSearch.vue - 只负责搜索条件 -->
-<template>
-  <el-form :model="searchForm" inline>
-    <el-form-item label="用户名">
-      <el-input v-model="searchForm.username" />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="handleSearch">搜索</el-button>
-    </el-form-item>
-  </el-form>
-</template>
-```
-
-#### 1.2 Props 定义规范
-
-```vue
-<script setup lang="ts">
-// ✅ 正确：使用 defineProps 定义
-interface Props {
-  modelValue?: string
-  options?: Array<{ label: string; value: any }>
-  placeholder?: string
-  disabled?: boolean
-  clearable?: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
-  options: () => [],
-  placeholder: '请选择',
-  disabled: false,
-  clearable: true
-})
-
-// ✅ 正确：使用 emit 定义事件
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-  (e: 'change', value: any): void
-  (e: 'clear'): void
-}>()
-</script>
-```
+- **单一职责**：搜索表单、表格、编辑弹窗各为独立 `.vue`，互不耦合。
+- **类型先行**：用业务实体类型（如 `Role`）泛型化 `withDefaultVxeGridOptions<Role>()`，避免 `any`。
+- **vben 封装优先**：表单字段、弹窗、表格均走 `@/components` 已封装的能力，不要直接手搓原生 antdv 表单布局。
+- **字典统一**：状态/类型字段统一用 `DictEnum` + `getDictOptions` + `OptionsTag` 展示，不要散落硬编码。
 
 ---
 
-### 2. 表单组件封装
+### 3. 表格组件（VxeGrid）
 
-#### 2.1 基础输入组件
+表格统一使用 `vxe-table` 的 `VxeGrid`，并通过 `@/components/vxe-table` 的封装工具配置。
 
 ```vue
-<!-- RInput.vue - 封装 el-input -->
+<!-- role.vue - 列表页表格 -->
+<script setup lang="ts">
+import type { Role } from '@/api/system/role/model';
+import type { VxeGridInstance, VxeGridListeners } from 'vxe-table';
+
+import { ref, useTemplateRef } from 'vue';
+import { roleList, roleRemove, roleChangeStatus } from '@/api/system/role';
+import { useAccess } from '@/components/access';
+import {
+  resolveQueryFormValues,
+  useTableQuery,
+  withDefaultVxeGridOptions,
+} from '@/components/vxe-table';
+import { Popconfirm, Space } from 'antdv-next';
+import { VxeGrid } from 'vxe-table';
+
+import { columns } from './data';
+
+const tableRef = useTemplateRef<VxeGridInstance<Role>>('tableRef');
+
+const gridOptions = withDefaultVxeGridOptions<Role>({
+  columns,
+  checkboxConfig: { highlight: true }, // 翻页保留选中
+  pagerConfig: { enabled: true },
+  proxyConfig: { ajax: { query: ({ page }) => roleList({ ...page }) } },
+});
+
+const gridEvents: VxeGridListeners = {
+  // 统一在 listeners 里分发事件，避免模板里堆 @click
+};
+
+// 查询：把搜索表单值合并进 grid 的查询请求
+const { query, reload } = useTableQuery(tableRef);
+
+function handleSearch(form: Record<string, any>) {
+  query(resolveQueryFormValues(form));
+}
+
+async function handleRemove(row: Role) {
+  await roleRemove(row.id);
+  reload();
+}
+</script>
+
 <template>
-  <el-input
-    v-model="internalValue"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    :clearable="clearable"
-    :maxlength="maxlength"
-    @input="handleInput"
-  >
-    <template v-if="prefixIcon" #prefix>
-      <el-icon><component :is="prefixIcon" /></el-icon>
+  <VxeGrid ref="tableRef" v-bind="gridOptions" v-on="gridEvents">
+    <template #toolbar-actions>
+      <RoleSearchForm @search="handleSearch" />
     </template>
-  </el-input>
-</template>
-
-<script setup lang="ts">
-const props = withDefaults(defineProps<{
-  modelValue: string
-  placeholder?: string
-  disabled?: boolean
-  clearable?: boolean
-  maxlength?: number
-  prefixIcon?: string
-}>(), {
-  placeholder: '请输入',
-  disabled: false,
-  clearable: true
-})
-
-const emit = defineEmits<{
-  'update:modelValue': [value: string]
-}>()
-
-const internalValue = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
-
-const handleInput = (value: string) => {
-  emit('update:modelValue', value)
-}
-</script>
-```
-
-#### 2.2 选择器组件
-
-```vue
-<!-- RSelect.vue - 封装 el-select -->
-<template>
-  <el-select
-    v-model="internalValue"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    :clearable="clearable"
-    :filterable="filterable"
-    :loading="loading"
-    @change="handleChange"
-  >
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-      :disabled="item.disabled"
-    />
-  </el-select>
-</template>
-
-<script setup lang="ts">
-interface Option {
-  label: string
-  value: any
-  disabled?: boolean
-}
-
-const props = withDefaults(defineProps<{
-  modelValue?: any
-  options: Option[]
-  placeholder?: string
-  disabled?: boolean
-  clearable?: boolean
-  filterable?: boolean
-  loading?: boolean
-}>(), {
-  modelValue: undefined,
-  placeholder: '请选择',
-  disabled: false,
-  clearable: true,
-  filterable: false,
-  loading: false
-})
-
-const emit = defineEmits<{
-  'update:modelValue': [value: any]
-  'change': [value: any]
-}>()
-
-const internalValue = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
-
-const handleChange = (value: any) => {
-  emit('change', value)
-}
-</script>
-```
-
----
-
-### 3. 表格组件封装
-
-```vue
-<!-- RTable.vue - 封装 el-table -->
-<template>
-  <div class="r-table">
-    <el-table
-      v-loading="loading"
-      :data="data"
-      :border="border"
-      :stripe="stripe"
-      :height="height"
-      @selection-change="handleSelectionChange"
-      @sort-change="handleSortChange"
-    >
-      <el-table-column
-        v-if="showSelection"
-        type="selection"
-        width="55"
-        align="center"
-      />
-      <el-table-column
-        v-if="showIndex"
-        type="index"
-        label="序号"
-        width="60"
-        align="center"
-      />
-      
-      <slot name="columns" />
-      
-      <el-table-column
-        v-if="showOperation"
-        label="操作"
-        width="200"
-        align="center"
-        fixed="right"
-      >
-        <slot name="operation" />
-      </el-table-column>
-    </el-table>
-    
-    <!-- 分页 -->
-    <el-pagination
-      v-if="showPagination"
-      v-model:current-page="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      :page-sizes="[10, 20, 50, 100]"
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
-  </div>
-</template>
-
-<script setup lang="ts">
-const props = withDefaults(defineProps<{
-  data: any[]
-  loading?: boolean
-  border?: boolean
-  stripe?: boolean
-  height?: number
-  showSelection?: boolean
-  showIndex?: boolean
-  showOperation?: boolean
-  showPagination?: boolean
-  total?: number
-  currentPage?: number
-  pageSize?: number
-}>(), {
-  loading: false,
-  border: true,
-  stripe: true,
-  height: undefined,
-  showSelection: false,
-  showIndex: true,
-  showOperation: false,
-  showPagination: true,
-  total: 0,
-  currentPage: 1,
-  pageSize: 10
-})()
-
-const emit = defineEmits<{
-  'selection-change': [selection: any[]]
-  'sort-change': [sort: any]
-  'size-change': [size: number]
-  'current-change': [current: number]
-}>()
-
-const handleSelectionChange = (selection: any[]) => {
-  emit('selection-change', selection)
-}
-
-const handleSortChange = (sort: any) => {
-  emit('sort-change', sort)
-}
-
-const handleSizeChange = (size: number) => {
-  emit('size-change', size)
-}
-
-const handleCurrentChange = (current: number) => {
-  emit('current-change', current)
-}
-</script>
-
-<style scoped>
-.r-table {
-  width: 100%;
-}
-</style>
-```
-
----
-
-### 4. 对话框组件封装
-
-```vue
-<!-- RDialog.vue - 封装 el-dialog -->
-<template>
-  <el-dialog
-    v-model="visible"
-    :title="title"
-    :width="width"
-    :close-on-click-modal="closeOnClickModal"
-    :close-on-press-escape="closeOnPressEscape"
-    :show-close="showClose"
-    :draggable="draggable"
-    @open="handleOpen"
-    @close="handleClose"
-  >
-    <slot />
-    
-    <template v-if="showFooter" #footer>
-      <el-button @click="handleCancel">{{ cancelText }}</el-button>
-      <el-button
-        type="primary"
-        :loading="confirmLoading"
-        @click="handleConfirm"
-      >
-        {{ confirmText }}
-      </el-button>
+    <template #action="{ row }">
+      <Popconfirm :title="`确认删除角色「${row.roleName}」？`" @confirm="handleRemove(row)">
+        <a-button danger type="link">删除</a-button>
+      </Popconfirm>
     </template>
-  </el-dialog>
+  </VxeGrid>
 </template>
+```
 
+要点：
+- 列定义抽到 `./data.ts`（`columns`），不要堆在模板里。
+- 请求统一走 `proxyConfig.ajax.query`，**禁止**在组件里 `onMounted` 手动调接口再赋值 `data`。
+- 表格实例用 `useTemplateRef<VxeGridInstance<Role>>('tableRef')`，不要 `ref<VxeGridInstance>()` 后再 `.value`。
+
+---
+
+### 4. 表单组件（antdv-next + vben 封装）
+
+#### 4.1 编辑弹窗表单
+
+表单字段统一用 `@/components/global/form` 的封装组件（`FormInput` / `FormSelect` / `FormInputNumber` / `FormTextArea`），布局用 `Form` + `FormItem`。
+
+```vue
+<!-- role-modal.vue -->
 <script setup lang="ts">
-const props = withDefaults(defineProps<{
-  modelValue: boolean
-  title?: string
-  width?: string
-  closeOnClickModal?: boolean
-  closeOnPressEscape?: boolean
-  showClose?: boolean
-  draggable?: boolean
-  showFooter?: boolean
-  cancelText?: string
-  confirmText?: string
-  confirmLoading?: boolean
-}>(), {
-  modelValue: false,
-  title: '',
-  width: '500px',
-  closeOnClickModal: false,
-  closeOnPressEscape: true,
-  showClose: true,
-  draggable: true,
-  showFooter: true,
-  cancelText: '取消',
-  confirmText: '确定',
-  confirmLoading: false
-})
+import type { Role } from '@/api/system/role/model';
+import type { AntdFormRules } from '@/types/form';
+import type { FormInstance } from 'antdv-next';
 
-const emit = defineEmits<{
-  'update:modelValue': [value: boolean]
-  'open': []
-  'close': []
-  'cancel': []
-  'confirm': []
-}>()
+import { computed, ref } from 'vue';
+import { roleAdd, roleInfo, roleUpdate } from '@/api/system/role';
+import { useVbenModal } from '@/components';
+import {
+  FormInput as Input,
+  FormInputNumber as InputNumber,
+  FormSelect as Select,
+  FormTextArea as TextArea,
+} from '@/components/global/form';
+import { DictEnum } from '@/constants';
+import { $t } from '@/locales';
+import { getDictOptions } from '@/utils/dict';
+import { Form, FormItem } from 'antdv-next';
 
-const visible = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
+const emit = defineEmits<{ reload: [] }>();
+const isUpdate = ref(false);
+const title = computed(() => (isUpdate.value ? $t('pages.common.edit') : $t('pages.common.add')));
 
-const handleOpen = () => emit('open')
-const handleClose = () => emit('close')
-const handleCancel = () => emit('cancel')
-const handleConfirm = () => emit('confirm')
+type FormData = Partial<Role>;
+
+function getDefaultValues(): FormData {
+  return { roleId: undefined, roleName: '', roleKey: '', roleSort: 1, status: '0', remark: '' };
+}
+
+const formData = ref<FormData>(getDefaultValues());
+const formInstance = ref<FormInstance>();
+
+const formRules = ref<AntdFormRules<FormData>>({
+  roleName: [{ required: true, message: $t('ui.formRules.required') }],
+  roleKey: [{ required: true, message: $t('ui.formRules.required') }],
+  roleSort: [{ required: true, message: $t('ui.formRules.required') }],
+  status: [{ required: true, message: $t('ui.formRules.selectRequired') }],
+});
+
+const [Modal, modalApi] = useVbenModal({
+  onOpenChange: async (open) => {
+    if (!open) return;
+    const data = modalApi.getData<Role>();
+    if (data?.roleId) {
+      isUpdate.value = true;
+      Object.assign(formData.value, await roleInfo(data.roleId));
+    } else {
+      isUpdate.value = false;
+      formData.value = getDefaultValues();
+    }
+  },
+  onConfirm: async () => {
+    await formInstance.value?.validate();
+    isUpdate.value ? await roleUpdate(formData.value) : await roleAdd(formData.value);
+    modalApi.close();
+    emit('reload');
+  },
+});
 </script>
+
+<template>
+  <Modal :title="title">
+    <Form ref="formInstance" :model="formData" :rules="formRules" layout="vertical">
+      <FormItem name="roleName" label="角色名称">
+        <Input v-model:value="formData.roleName" placeholder="请输入角色名称" />
+      </FormItem>
+      <FormItem name="roleKey" label="权限字符">
+        <Input v-model:value="formData.roleKey" placeholder="请输入权限字符" />
+      </FormItem>
+      <FormItem name="status" label="状态">
+        <Select v-model:value="formData.status" :options="getDictOptions(DictEnum.SYS_NORMAL_DISABLE)" />
+      </FormItem>
+      <FormItem name="roleSort" label="显示顺序">
+        <InputNumber v-model:value="formData.roleSort" :min="0" />
+      </FormItem>
+      <FormItem name="remark" label="备注">
+        <TextArea v-model:value="formData.remark" :rows="2" />
+      </FormItem>
+    </Form>
+  </Modal>
+</template>
+```
+
+#### 4.2 搜索表单
+
+搜索表单独立成组件，emit `search` 事件给列表页，**不要**直接持有表格实例。
+
+```vue
+<!-- role-search.vue -->
+<script setup lang="ts">
+import { reactive } from 'vue';
+import { FormInput as Input, FormSelect as Select } from '@/components/global/form';
+import { DictEnum } from '@/constants';
+import { getDictOptions } from '@/utils/dict';
+import { Form, FormItem } from 'antdv-next';
+import { SearchButtonGroup } from '@/components/table';
+
+const emit = defineEmits<{ search: [form: Record<string, any>]; reset: [] }>();
+const form = reactive({ roleName: '', status: undefined });
+
+function handleSearch() { emit('search', { ...form }); }
+function handleReset() { Object.assign(form, { roleName: '', status: undefined }); emit('reset'); }
+</script>
+
+<template>
+  <Form :model="form" class="table-search-grid">
+    <FormItem name="roleName" label="角色名称">
+      <Input v-model:value="form.roleName" allow-clear @press-enter="handleSearch" />
+    </FormItem>
+    <FormItem name="status" label="状态">
+      <Select v-model:value="form.status" :options="getDictOptions(DictEnum.SYS_NORMAL_DISABLE)" allow-clear />
+    </FormItem>
+    <SearchButtonGroup @search="handleSearch" @reset="handleReset" />
+  </Form>
+</template>
 ```
 
 ---
 
-### 5. 搜索表单组件
+### 5. 弹窗（useVbenModal）
 
-```vue
-<!-- RSearchForm.vue - 搜索表单封装 -->
-<template>
-  <el-form
-    ref="formRef"
-    :model="formData"
-    :inline="true"
-    class="r-search-form"
-  >
-    <slot :form="formData" />
-    
-    <el-form-item>
-      <el-button type="primary" @click="handleSearch">
-        <el-icon><Search /></el-icon>
-        搜索
-      </el-button>
-      <el-button @click="handleReset">
-        <el-icon><Refresh /></el-icon>
-        重置
-      </el-button>
-    </el-form-item>
-  </el-form>
-</template>
+**禁止**用 antdv 原生 `Modal` 直接 `v-model:open` 管开关；统一用 vben 的 `useVbenModal` hook：
 
-<script setup lang="ts">
-const props = defineProps<{
-  modelValue: Record<string, any>
-}>()
+```ts
+const [Modal, modalApi] = useVbenModal({
+  title: '编辑角色',
+  onOpenChange: (open) => { /* 打开/关闭回调，可在此拉详情 */ },
+  onConfirm: async () => { /* 提交校验+接口调用，成功后 modalApi.close() */ },
+});
 
-const emit = defineEmits<{
-  'update:modelValue': [value: Record<string, any>]
-  'search': [value: Record<string, any>]
-  'reset': []
-}>()
-
-const formRef = ref()
-
-const formData = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
-
-const handleSearch = () => {
-  emit('search', formData.value)
-}
-
-const handleReset = () => {
-  emit('reset')
-}
-</script>
-
-<style scoped>
-.r-search-form {
-  margin-bottom: 16px;
-}
-</style>
+// 打开方式（列表页）：
+modalApi.setData({ roleId: row.roleId });
+modalApi.open();
 ```
+
+- 列表页持有 `modalApi`，编辑组件持有 `[Modal]` 与 `onConfirm`。
+- 关闭后通过 `emit('reload')` 触发表格 `reload()`，**不要**在弹窗里直接操作表格实例。
 
 ---
 
-### 6. 使用示例
+### 6. 字典标签展示
 
-```vue
-<!-- 用户管理页面 -->
-<template>
-  <div class="user-management">
-    <!-- 搜索表单 -->
-    <RSearchForm v-model="searchForm" @search="handleSearch" @reset="handleReset">
-      <template #default="{ form }">
-        <el-form-item label="用户名">
-          <RInput v-model="form.username" placeholder="请输入用户名" />
-        </el-form-item>
-        <el-form-item label="状态">
-          <RSelect
-            v-model="form.status"
-            :options="statusOptions"
-            placeholder="请选择状态"
-          />
-        </el-form-item>
-      </template>
-    </RSearchForm>
-    
-    <!-- 表格 -->
-    <RTable
-      v-model:current-page="pagination.currentPage"
-      v-model:page-size="pagination.pageSize"
-      :data="userList"
-      :loading="loading"
-      :total="pagination.total"
-      show-selection
-      show-operation
-      @selection-change="handleSelectionChange"
-      @current-change="loadUserList"
-      @size-change="loadUserList"
-    >
-      <template #columns>
-        <el-table-column prop="username" label="用户名" />
-        <el-table-column prop="email" label="邮箱" />
-        <el-table-column prop="status" label="状态">
-          <template #default="{ row }">
-            <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-              {{ row.status === 1 ? '正常' : '禁用' }}
-            </el-tag>
-          </template>
-        </el-table-column>
-      </template>
-      
-      <template #operation="{ row }">
-        <el-button type="primary" size="small" @click="handleEdit(row)">
-          编辑
-        </el-button>
-        <el-button type="danger" size="small" @click="handleDelete(row)">
-          删除
-        </el-button>
-      </template>
-    </RTable>
-    
-    <!-- 编辑对话框 -->
-    <RDialog
-      v-model="dialogVisible"
-      :title="dialogTitle"
-      :confirm-loading="dialogLoading"
-      @confirm="handleConfirm"
-      @cancel="dialogVisible = false"
-    >
-      <el-form :model="form" label-width="80px">
-        <el-form-item label="用户名" required>
-          <RInput v-model="form.username" />
-        </el-form-item>
-        <el-form-item label="邮箱" required>
-          <RInput v-model="form.email" />
-        </el-form-item>
-      </el-form>
-    </RDialog>
-  </div>
-</template>
+状态字段在表格列里统一用 `OptionsTag`（`@/components/table`）渲染，不要逐行写 `<a-tag>` 判颜色：
+
+```ts
+// data.ts
+import { DictEnum } from '@/constants';
+import { OptionsTag } from '@/components/table';
+import { h } from 'vue';
+
+export const columns: VxeColumnSlotTypes[] = [
+  { field: 'roleName', title: '角色名称' },
+  {
+    field: 'status',
+    title: '状态',
+    slots: {
+      default: ({ row }) => h(OptionsTag, { options: getDictOptions(DictEnum.SYS_NORMAL_DISABLE), value: row.status }),
+    },
+  },
+];
 ```
 
 ---
 
 ## 组件命名规范
 
-| 组件名 | 说明 |
-|--------|------|
-| RInput | 输入框组件 |
-| RSelect | 选择器组件 |
-| RTable | 表格组件 |
-| RDialog | 对话框组件 |
-| RSearchForm | 搜索表单 |
-| RUpload | 上传组件 |
-| RTree | 树形组件 |
-| RPagination | 分页组件 |
+| 组件名 | 说明 | 来源 |
+|--------|------|------|
+| `VxeGrid` | 列表表格 | vxe-table（封装于 `@/components/vxe-table`） |
+| `Form / FormItem` | 表单容器与项 | antdv-next |
+| `FormInput / FormSelect / FormInputNumber / FormTextArea` | 表单字段封装 | `@/components/global/form` |
+| `OptionsTag` | 字典状态标签 | `@/components/table` |
+| `SearchButtonGroup` | 搜索/重置按钮组 | `@/components/table` |
+| `useVbenModal` | 弹窗 Hook | `@/components` |
+| `ApiSwitch` | 异步状态开关 | `@/components/global` |
+
+---
+
+## 常见错误
+
+| 错误 | 正确做法 |
+|------|----------|
+| 用 `el-table` / `el-form` / `el-input` | 本项目无 Element Plus，改用 `VxeGrid` + antdv-next 封装组件 |
+| 表格 `data` 手动赋值、`onMounted` 调接口 | 用 `VxeGrid` 的 `proxyConfig.ajax.query` + `useTableQuery` |
+| 弹窗用 `v-model:open` 手动管开关 | 用 `useVbenModal`，列表页 `modalApi.open()` |
+| 校验规则写 `as FormRules` | 用 `AntdFormRules<T>` 泛型，字段可被类型检查 |
+| 硬编码状态文案/颜色 | 走 `DictEnum` + `OptionsTag` |
+| 组件实例 `ref<VxeGridInstance>()` | 用 `useTemplateRef<VxeGridInstance<Role>>('tableRef')` |
 
 ---
 
 ## 触发关键词
 
-- Element Plus
-- UI 组件
-- 表单组件
-- 表格组件
-- 对话框
+- antdv-next / Ant Design Vue
+- vxe-table / VxeGrid
+- vben / useVbenModal
+- 表单组件 / 表格组件 / 弹窗
+- 字典标签 / OptionsTag
 - 组件封装
-- Vue 组件
 
 ---
 
 ## 相关文件
 
-- [vue-best-practices.md](./vue-best-practices.md) - Vue 开发最佳实践
+- [vue-best-practices.md](./vue-best-practices.md) - Vue 3 开发最佳实践
 - [store-bc.md](./store-bc.md) - Pinia 状态管理
-- [ui-design-mobile.md](./ui-design-mobile.md) - 移动端设计规范
+- [ui-mobile.md](./ui-mobile.md) - 移动端开发规范（UniApp + UView Plus）
 
 ---
 
-*更新时间：2026-04-06*  
-*RuoYi-Vue-Plus AI 开发助手*
+*基于 bell-plus 前端实际技术栈（antdv-next + vxe-table + vben-admin 封装）*
+*RuoYi-Vue-Plus 6.X AI 开发助手*

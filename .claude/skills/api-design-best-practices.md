@@ -1,3 +1,8 @@
+---
+name: api-design-best-practices
+description: 当进行 RESTful API 设计、编写 OpenAPI/Swagger 文档、管理 API 版本与响应契约时使用。
+---
+
 # API 设计最佳实践技能 (API Design Best Practices)
 
 ## 适用场景
@@ -151,7 +156,7 @@ openapi: 3.0.3
 info:
   title: RuoYi-Vue-Plus API
   description: 企业级开发框架 API 文档
-  version: 3.9.2
+  version: 6.0.0
   contact:
     name: API Support
     email: support@ruoyi.vip

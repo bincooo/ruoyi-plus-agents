@@ -1,3 +1,8 @@
+---
+name: mybatis-plus-best-practices
+description: 当使用 MyBatis-Plus 开发时使用 —— CRUD、Wrapper、分页、批量操作、性能优化（RuoYi-Vue-Plus ORM）。
+---
+
 # MyBatis-Plus 最佳实践技能 (MyBatis-Plus Best Practices)
 
 ## 适用场景

@@ -1,3 +1,8 @@
+---
+name: redis-cache
+description: 当使用 Redis 构建高性能缓存或分布式锁功能时使用（ruoyi-common-redis）。
+---
+
 # Redis缓存开发技能 (Redis Cache)
 
 ## 适用场景

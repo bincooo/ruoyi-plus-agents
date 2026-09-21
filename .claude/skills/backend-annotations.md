@@ -1,3 +1,8 @@
+---
+name: backend-annotations
+description: 当使用后端注解时使用 —— Spring、MyBatis-Plus、Sa-Token 权限、事务、数据权限、缓存等注解规范。
+---
+
 # Backend Annotations - 后端注解使用规范
 
 ## 职责范围
@@ -16,20 +21,20 @@
 // ✅ 正确：添加权限注解
 @SaCheckPermission("system:user:add")
 @PostMapping
-public AjaxResult add(@RequestBody SysUser user) {
+public R<add(@RequestBody SysUser user) {
     return toAjax(userService.add(user));
 }
 
 // ✅ 正确：多个权限（OR 关系）
 @SaCheckPermission(value = {"system:user:add", "system:user:edit"}, logical = Logical.OR)
 @PostMapping
-public AjaxResult save(@RequestBody SysUser user) {
+public R<save(@RequestBody SysUser user) {
     return toAjax(userService.save(user));
 }
 
 // ❌ 错误：缺少权限注解
 @PostMapping
-public AjaxResult add(@RequestBody SysUser user) {
+public R<add(@RequestBody SysUser user) {
     return toAjax(userService.add(user));
 }
 ```
@@ -40,7 +45,7 @@ public AjaxResult add(@RequestBody SysUser user) {
 // 仅允许 admin 角色访问
 @SaCheckRole("admin")
 @DeleteMapping("/{ids}")
-public AjaxResult remove(@PathVariable Long[] ids) {
+public R<remove(@PathVariable Long[] ids) {
     return toAjax(userService.removeByIds(Arrays.asList(ids)));
 }
 ```
@@ -51,8 +56,8 @@ public AjaxResult remove(@PathVariable Long[] ids) {
 // 必须登录后访问
 @SaCheckLogin
 @GetMapping("/profile")
-public AjaxResult getProfile() {
-    return AjaxResult.success(StpUtil.getTokenInfo());
+public R<getProfile() {
+    return R.ok(StpUtil.getTokenInfo());
 }
 ```
 
@@ -162,9 +167,9 @@ public void processBusiness() {
 // ❌ 错误：事务加在 Controller 层
 @Transactional  // 不应该在这里
 @PostMapping
-public AjaxResult add(@RequestBody SysUser user) {
+public R<add(@RequestBody SysUser user) {
     userService.add(user);
-    return AjaxResult.success();
+    return R.ok();
 }
 ```
 
@@ -177,14 +182,14 @@ public AjaxResult add(@RequestBody SysUser user) {
 public class UserController {
     
     @PostMapping
-    public AjaxResult add(@Validated @RequestBody UserBO user) {
+    public R<add(@Validated @RequestBody UserBO user) {
         // ...
     }
 }
 
 // ✅ 正确：分组校验
 @PostMapping
-public AjaxResult add(@Validated(AddGroup.class) @RequestBody UserBO user) {
+public R<add(@Validated(AddGroup.class) @RequestBody UserBO user) {
     // ...
 }
 
@@ -229,7 +234,7 @@ public class UserBO {
 @Log(title = "用户管理", businessType = BusinessType.INSERT)
 @SaCheckPermission("system:user:add")
 @PostMapping
-public AjaxResult add(@RequestBody SysUser user) {
+public R<add(@RequestBody SysUser user) {
     return toAjax(userService.add(user));
 }
 
@@ -263,7 +268,7 @@ public List<SysUser> selectMyUsers(SysUser user) {
 // 5 秒内防止重复提交
 @RepeatSubmit(interval = 5000, message = "请勿重复提交")
 @PostMapping
-public AjaxResult add(@RequestBody SysUser user) {
+public R<add(@RequestBody SysUser user) {
     return toAjax(userService.add(user));
 }
 ```
@@ -274,7 +279,7 @@ public AjaxResult add(@RequestBody SysUser user) {
 // 每秒最多 5 次请求
 @RateLimiter(count = 5, time = 1)
 @GetMapping("/list")
-public AjaxResult list(SysUser user) {
+public R<list(SysUser user) {
     return getData(userService.selectUserList(user));
 }
 ```
@@ -293,14 +298,14 @@ public class UserController {
     
     @Operation(summary = "用户列表", description = "分页查询用户列表")
     @GetMapping("/list")
-    public AjaxResult list(SysUser user) {
+    public R<list(SysUser user) {
         return getData(userService.selectUserList(user));
     }
     
     @Operation(summary = "新增用户")
     @SaCheckPermission("system:user:add")
     @PostMapping
-    public AjaxResult add(@RequestBody SysUser user) {
+    public R<add(@RequestBody SysUser user) {
         return toAjax(userService.add(user));
     }
 }
@@ -311,7 +316,7 @@ public class UserController {
 ```java
 @Operation(summary = "删除用户")
 @DeleteMapping("/{userIds}")
-public AjaxResult remove(
+public R<remove(
     @Parameter(description = "用户 ID 数组", required = true)
     @PathVariable Long[] userIds) {
     return toAjax(userService.removeByIds(userIds));
@@ -375,12 +380,12 @@ public void process() {
 // ❌ 错误：权限注解在 URL 映射上
 @SaCheckPermission("system:user:list")
 @GetMapping("/list")
-public AjaxResult list() { }
+public R<list() { }
 
 // ✅ 正确：权限注解在方法上
 @GetMapping("/list")
 @SaCheckPermission("system:user:list")
-public AjaxResult list() { }
+public R<list() { }
 ```
 
 ### 错误 3：校验注解未生效
@@ -388,14 +393,14 @@ public AjaxResult list() { }
 ```java
 // ❌ 错误：缺少 @Validated
 @PostMapping
-public AjaxResult add(@RequestBody @Valid UserBO user) { }
+public R<add(@RequestBody @Valid UserBO user) { }
 
 // ✅ 正确：Controller 添加 @Validated
 @Validated
 @RestController
 public class UserController {
     @PostMapping
-    public AjaxResult add(@Validated @RequestBody UserBO user) { }
+    public R<add(@Validated @RequestBody UserBO user) { }
 }
 ```
 

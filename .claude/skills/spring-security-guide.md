@@ -1,10 +1,17 @@
-# Spring Security 与认证授权技能 (Spring Security Guide)
+---
+name: spring-security-guide
+description: 当实现认证授权时使用 —— Sa-Token 认证、RBAC 权限、Token 管理、JustAuth 第三方登录（本项目非 Spring Security）。
+---
+
+# 认证授权技能 (Auth & Access Control Guide)
+
+> RuoYi-Vue-Plus 6.X 使用 **Sa-Token** 作为认证授权框架（非 Spring Security）。本技能涵盖 Sa-Token 认证、RBAC 权限、Token 管理、第三方登录等。
 
 ## 适用场景
 - 用户认证系统开发
 - RBAC 权限控制
-- JWT Token 管理
-- OAuth2 第三方登录
+- Token 管理（Sa-Token）
+- OAuth2 / 第三方登录（JustAuth）
 - 方法级权限控制
 
 ## 核心技术栈
@@ -16,8 +23,9 @@
 | Token 类型 | JWT | JSON Web Token |
 | 密码加密 | BCrypt | 强哈希密码加密 |
 | 权限模型 | RBAC | 基于角色的访问控制 |
+| 第三方登录 | JustAuth | 社交登录（ruoyi-common-social） |
 
-### Spring Security 核心概念
+### 认证授权核心概念
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    认证 (Authentication)                 │

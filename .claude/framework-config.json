@@ -1,11 +1,11 @@
 {
   "name": "RuoYi-Vue-Plus",
-  "version": "5.x",
-  "description": "企业级JavaEE开发框架，基于Spring Boot 3.2+、Vue 3和Element Plus",
+  "version": "6.x",
+  "description": "企业级JavaEE开发框架，基于Spring Boot 4.1+、Vue 3和antdv-Next",
   "backend_stack": {
     "language": "Java",
     "jdk": ">=17",
-    "framework": "Spring Boot 3.2+",
+    "framework": "Spring Boot 4.1+",
     "orm": "MyBatis-Plus 3.5+",
     "auth": "Sa-Token",
     "scheduler": "SnailJob",
@@ -17,12 +17,12 @@
     "framework": "Vue 3.3+",
     "build_tool": "Vite 4+",
     "ui_library": "Element Plus",
-    "admin_template": "Vben Admin 4.x",
+    "admin_template": "bell-plus",
     "state_management": "Pinia",
     "typescript": true
   },
   "infrastructure": {
-    "database": "MySQL 8.0",
+    "database": "postgres 16.0",
     "cache": "Redis 6.0+",
     "server": "Nginx",
     "os": "Linux/Windows/macOS"

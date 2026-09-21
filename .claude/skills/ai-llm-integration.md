@@ -1,3 +1,8 @@
+---
+name: ai-llm-integration
+description: 当开发 AI/LLM 应用功能时使用 —— RAG、向量存储、提示词工程、Embedding 管道等大模型集成场景。
+---
+
 # AI 与 LLM 集成技能 (AI & LLM Integration)
 
 ## 适用场景

@@ -1,3 +1,8 @@
+---
+name: performance-optimization
+description: 当进行系统性能优化时使用 —— SQL 调优、索引设计、HikariCP 连接池、瓶颈分析。
+---
+
 # 性能优化与 SQL 调优技能 (Performance Optimization & SQL Tuning)
 
 ## 适用场景
@@ -350,21 +355,18 @@ public class DictService {
 
 ### 连接池优化
 
-#### Druid 连接池配置
+#### HikariCP 连接池配置（RuoYi-Vue-Plus 6.X 默认连接池）
 ```yaml
 spring:
   datasource:
-    druid:
-      initial-size: 5              # 初始连接数
-      min-idle: 10                 # 最小空闲连接
-      max-active: 20               # 最大活跃连接
-      max-wait: 60000              # 获取连接最大等待时间 (ms)
-      time-between-eviction-runs-millis: 60000  # 检测间隔
-      min-evictable-idle-time-millis: 300000    # 最小空闲时间
-      test-while-idle: true        # 空闲时检测
-      test-on-borrow: false        # 获取时不检测
-      test-on-return: false        # 归还时不检测
-      validation-query: SELECT 1   # 验证查询
+    hikari:
+      minimum-idle: 10             # 最小空闲连接
+      maximum-pool-size: 20        # 最大活跃连接
+      connection-timeout: 60000    # 获取连接最大等待时间 (ms)
+      idle-timeout: 300000         # 最小空闲时间 (ms)
+      max-lifetime: 1800000        # 连接最大存活时间 (ms)
+      connection-test-query: SELECT 1  # 验证查询
+      pool-name: RuoYiHikariCP     # 连接池名称
 ```
 
 ## 性能监控

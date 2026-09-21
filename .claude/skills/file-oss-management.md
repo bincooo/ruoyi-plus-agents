@@ -1,3 +1,8 @@
+---
+name: file-oss-management
+description: 当开发文件上传、对象存储（OSS）集成或图片处理功能时使用（ruoyi-common-oss）。
+---
+
 # File OSS Management - 文件上传与 OSS 管理
 
 ## 职责范围
@@ -301,17 +306,17 @@ public class FileController {
      */
     @PostMapping("/upload")
     @SaCheckPermission("system:file:upload")
-    public AjaxResult uploadFile(
+    public R<uploadFile(
         @RequestParam("file") MultipartFile file,
         @RequestParam(value = "dir", defaultValue = "upload") String dir
     ) {
         if (file.isEmpty()) {
-            return AjaxResult.error("上传文件不能为空");
+            return R.fail("上传文件不能为空");
         }
 
         // 校验文件大小（默认 10MB）
         if (file.getSize() > 10 * 1024 * 1024) {
-            return AjaxResult.error("文件大小不能超过 10MB");
+            return R.fail("文件大小不能超过 10MB");
         }
 
         // 上传到 OSS
@@ -321,7 +326,7 @@ public class FileController {
         SysFile sysFile = convertToFile(fileInfo);
         fileService.save(sysFile);
 
-        return AjaxResult.success()
+        return R.ok()
             .put("fileId", sysFile.getFileId())
             .put("fileName", sysFile.getFileName())
             .put("fileUrl", sysFile.getFileUrl());
@@ -332,7 +337,7 @@ public class FileController {
      */
     @PostMapping("/upload/batch")
     @SaCheckPermission("system:file:upload")
-    public AjaxResult uploadBatch(
+    public R<uploadBatch(
         @RequestParam("files") List<MultipartFile> files,
         @RequestParam(value = "dir", defaultValue = "upload") String dir
     ) {
@@ -354,7 +359,7 @@ public class FileController {
             ));
         }
 
-        return AjaxResult.success(result);
+        return R.ok(result);
     }
 
     /**
@@ -362,10 +367,10 @@ public class FileController {
      */
     @DeleteMapping("/{fileId}")
     @SaCheckPermission("system:file:delete")
-    public AjaxResult deleteFile(@PathVariable Long fileId) {
+    public R<deleteFile(@PathVariable Long fileId) {
         SysFile sysFile = fileService.getById(fileId);
         if (sysFile == null) {
-            return AjaxResult.error("文件不存在");
+            return R.fail("文件不存在");
         }
 
         // 删除 OSS 文件
@@ -374,20 +379,20 @@ public class FileController {
         // 删除数据库记录
         fileService.removeById(fileId);
 
-        return AjaxResult.success();
+        return R.ok();
     }
 
     /**
      * 生成临时访问链接
      */
     @GetMapping("/{fileId}/presigned-url")
-    public AjaxResult getPresignedUrl(
+    public R<getPresignedUrl(
         @PathVariable Long fileId,
         @RequestParam(value = "expires", defaultValue = "3600") Long expires
     ) {
         SysFile sysFile = fileService.getById(fileId);
         if (sysFile == null) {
-            return AjaxResult.error("文件不存在");
+            return R.fail("文件不存在");
         }
 
         String url = ossService.generatePresignedUrl(
@@ -395,7 +400,7 @@ public class FileController {
             Duration.ofSeconds(expires)
         );
 
-        return AjaxResult.success().put("url", url);
+        return R.ok().put("url", url);
     }
 }
 ```

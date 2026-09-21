@@ -1,3 +1,8 @@
+---
+name: ruoyi-development
+description: 当在 RuoYi-Vue-Plus 6.X 框架上开发时使用 —— 开发规范、基类、工具类、框架用法。
+---
+
 # RuoYi 开发规范技能 (RuoYi Development Standards)
 
 ## 适用场景
@@ -22,11 +27,10 @@
 ```
 ruoyi-project/
 ├── ruoyi-admin/          # 启动模块
-├── ruoyi-common/         # 通用模块
-├── ruoyi-framework/      # 框架模块
-├── ruoyi-system/         # 系统模块
-├── ruoyi-generator/      # 代码生成
-├── ruoyi-quartz/         # 定时任务
+├── ruoyi-common/         # 通用模块（core/mybatis/redis/satoken/security 等 20+ 子模块）
+├── ruoyi-modules/        # 业务模块（system/generator/job/workflow/wms/ai 等）
+├── ruoyi-api/            # API 接口定义
+├── ruoyi-extend/         # 扩展模块
 └── [业务模块]/           # 自定义业务模块
 ```
 
@@ -422,8 +426,8 @@ String snakeCase = StringUtils.toUnderScore("userName");
 ```yaml
 # 项目配置
 ruoyi:
-  name: RuoYi
-  version: 3.9.2
+  name: RuoYi-Vue-Plus
+  version: 6.0.0
   copyrightYear: 2026
 
 # 服务器配置
@@ -432,16 +436,17 @@ server:
   servlet:
     context-path: /
 
-# 数据源配置
+# 数据源配置（HikariCP）
 spring:
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    druid:
-      master:
-        url: jdbc:mysql://localhost:3306/ry-vue?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
-        username: root
-        password: password
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 20
+      pool-name: RuoYiHikariCP
+    url: jdbc:mysql://localhost:3306/ry-vue?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: password
 
 # Redis 配置
   data:
@@ -452,7 +457,7 @@ spring:
 
 # MyBatis 配置
 mybatis:
-  typeAliasesPackage: com.ruoyi.**.domain
+  typeAliasesPackage: org.dromara.**.domain
   mapperLocations: classpath*:mapper/**/*Mapper.xml
   configLocation: classpath:mybatis/mybatis-config.xml
 ```

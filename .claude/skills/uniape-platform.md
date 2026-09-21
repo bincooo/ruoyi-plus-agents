@@ -1,3 +1,8 @@
+---
+name: uniape-platform
+description: 当进行 UniApp 多端发布的跨平台条件编译时使用（H5、小程序、App）。
+---
+
 # Uniape Platform - 跨平台条件编译
 
 ## 职责范围
@@ -575,8 +580,7 @@ function login() {
 ## 相关文件
 
 - [ui-mobile.md](./ui-mobile.md) - 移动端开发规范
-- [store-mobile.md](./store-mobile.md) - 移动端状态管理
-- [ui-design-mobile.md](./ui-design-mobile.md) - 移动端设计规范
+- [vue-best-practices.md](./vue-best-practices.md) - Vue 3 开发最佳实践
 
 ---
 

@@ -1,0 +1,719 @@
+<title>RuoYi-Plus 项目全景</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #F4F6F8;
+    --surface: #FFFFFF;
+    --surface-2: #EDF0F4;
+    --ink: #1C2630;
+    --muted: #5A6875;
+    --line: #D9DEE5;
+    --accent: #2F6BAF;
+    --accent-deep: #1F4E85;
+    --accent-soft: #E7EEF7;
+    --warn-ink: #7A5200;
+    --warn-soft: #F7EFDC;
+    --warn-line: #E5D5A8;
+    --ok: #2E7D5B;
+    --code-bg: #1E2833;
+    --code-ink: #DCE6F0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #12181F;
+      --surface: #1A222C;
+      --surface-2: #222C37;
+      --ink: #E3E8ED;
+      --muted: #97A5B3;
+      --line: #2D3844;
+      --accent: #74A9DF;
+      --accent-deep: #A5C8EC;
+      --accent-soft: #20303F;
+      --warn-ink: #E3BC72;
+      --warn-soft: #2A2315;
+      --warn-line: #4A3D22;
+      --ok: #6FBF97;
+      --code-bg: #0E141B;
+      --code-ink: #D5E0EB;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #12181F;
+    --surface: #1A222C;
+    --surface-2: #222C37;
+    --ink: #E3E8ED;
+    --muted: #97A5B3;
+    --line: #2D3844;
+    --accent: #74A9DF;
+    --accent-deep: #A5C8EC;
+    --accent-soft: #20303F;
+    --warn-ink: #E3BC72;
+    --warn-soft: #2A2315;
+    --warn-line: #4A3D22;
+    --ok: #6FBF97;
+    --code-bg: #0E141B;
+    --code-ink: #D5E0EB;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  h1, h2, h3 {
+    font-family: "Archivo", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+      "Noto Sans CJK SC", sans-serif;
+    text-wrap: balance;
+    line-height: 1.3;
+  }
+  code, pre, .mono {
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas,
+      "Liberation Mono", monospace;
+  }
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---- sticky nav ---- */
+  .topnav {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topnav-inner {
+    max-width: 960px; margin: 0 auto; padding: 10px 24px;
+    display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap;
+  }
+  .topnav-title {
+    font-family: "Archivo", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-weight: 700; font-size: 14px; color: var(--ink); white-space: nowrap;
+  }
+  .topnav-links { display: flex; gap: 16px; flex-wrap: wrap; }
+  .topnav-links a {
+    font-size: 12.5px; color: var(--muted); text-decoration: none;
+  }
+  .topnav-links a:hover { color: var(--accent); }
+
+  .page {
+    max-width: 960px; margin: 0 auto; padding: 0 24px 96px;
+    display: flex; flex-direction: column; gap: 64px;
+  }
+
+  /* ---- header ---- */
+  header.masthead { padding-top: 56px; }
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.14em;
+    color: var(--accent); text-transform: uppercase; margin: 0 0 14px;
+  }
+  h1.doc-title {
+    font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.01em;
+  }
+  .lede { font-size: 16.5px; color: var(--muted); max-width: 46em; margin: 0 0 28px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .fact {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 4px; padding: 4px 10px; color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .fact b { color: var(--accent); font-weight: 600; }
+
+  /* ---- sections ---- */
+  section { scroll-margin-top: 64px; }
+  .sec-head { border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 24px; }
+  h2.sec-title { font-size: 24px; font-weight: 700; margin: 0; }
+  .sec-sub { color: var(--muted); font-size: 14px; margin: 6px 0 0; }
+
+  h3 { font-size: 16.5px; font-weight: 700; margin: 32px 0 12px; }
+  h3:first-of-type { margin-top: 0; }
+  p { margin: 0 0 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ---- tables ---- */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 560px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em;
+    color: var(--muted); background: var(--surface-2); white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td code, p code, li code {
+    font-size: 12.5px; background: var(--surface-2);
+    border: 1px solid var(--line); border-radius: 3px; padding: 1px 5px;
+    white-space: nowrap;
+  }
+  td.num { font-variant-numeric: tabular-nums; }
+
+  /* ---- code blocks ---- */
+  .codeblock { border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
+  .codeblock .code-label {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.1em;
+    color: var(--muted); background: var(--surface-2);
+    padding: 6px 14px; border-bottom: 1px solid var(--line);
+    text-transform: uppercase;
+  }
+  .codeblock pre {
+    margin: 0; padding: 14px 16px; overflow-x: auto;
+    background: var(--code-bg); color: var(--code-ink);
+    font-size: 13px; line-height: 1.7;
+  }
+  .codeblock pre .c { color: #7E93A8; }
+  .codeblock pre .a { color: #8FBCD9; }
+
+  /* ---- architecture diagram ---- */
+  .arch { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+  .arch-node {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+    padding: 14px 18px; display: flex; flex-wrap: wrap; align-items: baseline;
+    gap: 6px 14px;
+  }
+  .arch-node .n-name { font-weight: 700; font-size: 15px; font-family: "Archivo", "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .arch-node .n-desc { color: var(--muted); font-size: 13px; flex-basis: 100%; }
+  .arch-node .n-port {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    color: var(--accent); background: var(--accent-soft);
+    border-radius: 3px; padding: 1px 7px; font-variant-numeric: tabular-nums;
+  }
+  .arch-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 0 7px 28px; color: var(--muted);
+  }
+  .arch-link .arrow { color: var(--accent); font-size: 15px; }
+  .arch-link .lbl { font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+  .arch-services { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  .arch-svc {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .arch-svc .s-name { font-weight: 700; font-size: 13.5px; }
+  .arch-svc .s-port {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- warning cards ---- */
+  .note {
+    border: 1px solid var(--warn-line); background: var(--warn-soft);
+    border-radius: 6px; padding: 14px 18px; margin-bottom: 12px;
+  }
+  .note:last-child { margin-bottom: 0; }
+  .note .n-title { font-weight: 700; color: var(--warn-ink); font-size: 14px; margin-bottom: 4px; }
+  .note p { font-size: 13.5px; color: var(--ink); margin: 0; }
+  .note code { background: transparent; border-color: var(--warn-line); }
+
+  /* ---- two column grid ---- */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ---- step list ---- */
+  ol.steps { margin: 0; padding: 0; list-style: none; counter-reset: step; display: flex; flex-direction: column; gap: 16px; }
+  ol.steps > li { counter-increment: step; position: relative; padding-left: 44px; }
+  ol.steps > li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute; left: 0; top: 1px;
+    font-family: "IBM Plex Mono", monospace; font-size: 13px; font-weight: 600;
+    color: var(--accent); border: 1px solid var(--line); background: var(--surface);
+    border-radius: 4px; width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  ol.steps .step-title { font-weight: 700; font-size: 14.5px; margin-bottom: 4px; }
+  ol.steps p { font-size: 13.5px; color: var(--muted); margin: 0; }
+  ol.steps p + p { margin-top: 6px; }
+
+  ul.plain { margin: 0; padding-left: 20px; }
+  ul.plain li { margin-bottom: 6px; font-size: 14px; }
+  ul.plain li:last-child { margin-bottom: 0; }
+
+  .footer-note { color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 20px; }
+</style>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <span class="topnav-title">RuoYi-Plus 项目全景</span>
+    <div class="topnav-links">
+      <a href="#arch">架构</a>
+      <a href="#stack">技术栈</a>
+      <a href="#dirs">目录</a>
+      <a href="#modules">模块</a>
+      <a href="#wms">业务现状</a>
+      <a href="#setup">环境搭建</a>
+      <a href="#config">配置</a>
+      <a href="#commands">命令</a>
+      <a href="#conventions">规范</a>
+      <a href="#notes">提醒</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+<header class="masthead" id="top">
+  <p class="kicker">Onboarding · 新成员入门</p>
+  <h1 class="doc-title">RuoYi-Plus 项目全景</h1>
+  <p class="lede">
+    一套「Spring Boot 4 + Vue 3」的全栈中后台工程：后端基于 RuoYi-Vue-Plus 6.X（org.dromara），
+    前端是基于 vben 5.7 重构的 bell-plus 单仓应用，数据库为 PostgreSQL。
+    当前业务开发集中在 WMS 仓储管理模块。
+  </p>
+  <div class="facts">
+    <span class="fact">后端 <b>6.0.0</b> · Spring Boot <b>4.1.0</b></span>
+    <span class="fact">JDK <b>21</b></span>
+    <span class="fact">数据库 <b>PostgreSQL</b></span>
+    <span class="fact">前端 <b>bell-plus</b> · Vue <b>3.5.40</b></span>
+    <span class="fact">包管理 <b>pnpm 11</b></span>
+    <span class="fact">端口 <b>5666 → 8080</b></span>
+  </div>
+</header>
+
+<!-- ==================== 架构总览 ==================== -->
+<section id="arch">
+  <div class="sec-head">
+    <h2 class="sec-title">架构总览</h2>
+    <p class="sec-sub">两个独立 Git 仓库，前后端分离，本地开发时由 Vite 代理转发接口。</p>
+  </div>
+
+  <div class="arch">
+    <div class="arch-node">
+      <span class="n-name">bell-plus（前端）</span>
+      <span class="n-port">localhost:5666</span>
+      <span class="n-desc">Vite dev server · vben 5.7 单仓重构 · antdv-next 组件库 · 所有 <code>/dev-api</code> 请求代理到后端</span>
+    </div>
+    <div class="arch-link">
+      <span class="arrow">↓</span>
+      <span class="lbl">/dev-api 代理 → http://127.0.0.1:8080（vite.config.ts）</span>
+    </div>
+    <div class="arch-node">
+      <span class="n-name">RuoYi-Vue-Plus（后端）</span>
+      <span class="n-port">localhost:8080</span>
+      <span class="n-desc">ruoyi-admin 启动 · 入口类 <code>org.dromara.DromaraApplication</code> · Sa-Token 认证 · 接口文档 /swagger-ui</span>
+    </div>
+    <div class="arch-link">
+      <span class="arrow">↓</span>
+      <span class="lbl">JDBC · Redisson · MQTT · …</span>
+    </div>
+    <div class="arch-services">
+      <div class="arch-svc"><div class="s-name">PostgreSQL</div><div class="s-port">:5432 / ruoyi-6.x</div></div>
+      <div class="arch-svc"><div class="s-name">Redis</div><div class="s-port">:6379 / db 0</div></div>
+      <div class="arch-svc"><div class="s-name">MQTT (mica-mqtt)</div><div class="s-port">:1883</div></div>
+      <div class="arch-svc"><div class="s-name">Monitor Admin</div><div class="s-port">:9090/admin</div></div>
+    </div>
+  </div>
+
+  <h3>仓库分工</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>仓库</th><th>内容</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>RuoYi-Vue-Plus/</code></td>
+          <td>后端全部源码（Maven 多模块）</td>
+          <td>框架 6.0.0 + 自研业务模块（ruoyi-wms 等），含 script/sql、docker 部署脚本</td>
+        </tr>
+        <tr>
+          <td><code>bell-plus/</code></td>
+          <td>前端单仓应用（pnpm workspace）</td>
+          <td>vben 5.7 重构为单仓，含 WMS 业务页面、S3 直传上传组件</td>
+        </tr>
+        <tr>
+          <td><code>docker/ · docker-compose.*.yml</code></td>
+          <td>中间件容器编排</td>
+          <td>dev compose 内置 MySQL 8 + Redis 7 + Nginx —— <b>注意与实际使用的 PostgreSQL 不一致，见文末提醒</b></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ==================== 技术栈 ==================== -->
+<section id="stack">
+  <div class="sec-head">
+    <h2 class="sec-title">技术栈</h2>
+    <p class="sec-sub">版本号取自两个仓库的 pom.xml / pnpm-workspace.yaml catalog，以代码为准。</p>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3>后端 · RuoYi-Vue-Plus 6.0.0</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>组件</th><th>版本</th></tr></thead>
+          <tbody>
+            <tr><td>Spring Boot</td><td class="num">4.1.0</td></tr>
+            <tr><td>JDK</td><td class="num">21</td></tr>
+            <tr><td>MyBatis-Plus</td><td class="num">3.5.17</td></tr>
+            <tr><td>Sa-Token（认证）</td><td class="num">1.45.0</td></tr>
+            <tr><td>Redisson（Redis）</td><td class="num">4.6.1</td></tr>
+            <tr><td>Hutool</td><td class="num">5.8.47</td></tr>
+            <tr><td>Spring AI</td><td class="num">2.0.0</td></tr>
+            <tr><td>dynamic-datasource</td><td class="num">4.5.0</td></tr>
+            <tr><td>包名</td><td><code>org.dromara.*</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-top:10px;">
+        其余中间件能力：MQTT（mica-mqtt）、Elasticsearch、LiteFlow 规则流、SSE 推送、MCP、SnailJob 任务调度。
+      </p>
+    </div>
+    <div>
+      <h3>前端 · bell-plus 1.0.0</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>组件</th><th>版本</th></tr></thead>
+          <tbody>
+            <tr><td>Vue</td><td class="num">3.5.40</td></tr>
+            <tr><td>UI 组件库</td><td>antdv-next 1.4.6</td></tr>
+            <tr><td>TypeScript</td><td class="num">6.0.3</td></tr>
+            <tr><td>Vite</td><td class="num">8.2.0</td></tr>
+            <tr><td>Node</td><td class="num">^22.18 \|\| ^24</td></tr>
+            <tr><td>pnpm</td><td class="num">11.2.2（强制）</td></tr>
+            <tr><td>表格</td><td>vxe-table + vxe-pc-ui</td></tr>
+            <tr><td>请求库</td><td>alova + axios 适配</td></tr>
+            <tr><td>其他</td><td>Pinia · Tailwind 4 · ECharts · Tiptap</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-top:10px;">
+        接口请求开启 RSA 加密（<code>VITE_GLOB_ENABLE_ENCRYPT=true</code>），密钥与后端 application.yml 的 api-decrypt 配置成对。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 目录结构 ==================== -->
+<section id="dirs">
+  <div class="sec-head">
+    <h2 class="sec-title">目录结构</h2>
+    <p class="sec-sub">已压缩到日常会接触的层级，完整结构以仓库为准。</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="codeblock">
+      <div class="code-label">RuoYi-Vue-Plus（后端）</div>
+      <pre>RuoYi-Vue-Plus/
+├── ruoyi-admin/          <span class="c"># 启动入口 + 全局配置</span>
+│   └── resources/
+│       ├── application.yml
+│       ├── application-local.yml   <span class="c"># 真实连接信息(gitignore)</span>
+│       ├── application-dev.yml
+│       └── application-prod.yml
+├── ruoyi-api/            <span class="c"># 跨模块接口定义</span>
+├── ruoyi-common/         <span class="c"># 25 个通用模块</span>
+├── ruoyi-modules/
+│   ├── ruoyi-system/     <span class="c"># 系统管理</span>
+│   ├── ruoyi-gen/        <span class="c"># 代码生成器</span>
+│   ├── ruoyi-job/        <span class="c"># 任务调度</span>
+│   ├── ruoyi-workflow/   <span class="c"># 工作流</span>
+│   ├── ruoyi-activiti/
+│   ├── ruoyi-ai/         <span class="c"># AI 对话</span>
+│   ├── ruoyi-wms/        <span class="c"># ★ 仓储业务(开发中)</span>
+│   └── ruoyi-demo/
+├── ruoyi-extend/
+│   ├── ruoyi-monitor-admin/
+│   ├── ruoyi-snailai-server/
+│   └── ruoyi-snailjob-server/
+└── script/sql/postgres/  <span class="c"># 初始化 SQL</span></pre>
+    </div>
+    <div class="codeblock">
+      <div class="code-label">bell-plus（前端）</div>
+      <pre>bell-plus/
+├── src/
+│   ├── api/              <span class="c"># 接口定义(按模块分目录)</span>
+│   │   ├── system/ · tool/ · monitor/
+│   │   ├── wms/ · workflow/ · ai/
+│   │   └── core/         <span class="c"># 请求封装·加密</span>
+│   ├── views/            <span class="c"># 页面(与 api 对应)</span>
+│   │   ├── system/ · tool/ · monitor/
+│   │   ├── wms/ · workflow/ · ai/
+│   │   └── dashboard/ · demo/
+│   ├── router/           <span class="c"># 路由(动态菜单)</span>
+│   ├── stores/           <span class="c"># Pinia</span>
+│   ├── layouts/ · components/
+│   ├── locales/          <span class="c"># i18n</span>
+│   └── hooks/ · utils/
+├── internal/             <span class="c"># vite-config 等</span>
+├── .env.development      <span class="c"># 端口/代理/RSA 密钥</span>
+└── vite.config.ts        <span class="c"># /dev-api → :8080</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 模块 ==================== -->
+<section id="modules">
+  <div class="sec-head">
+    <h2 class="sec-title">后端模块速览</h2>
+    <p class="sec-sub">ruoyi-common 25 个模块按需引入；业务开发主要发生在 ruoyi-modules。</p>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>业务模块</th><th>职责</th><th>日常接触</th></tr></thead>
+      <tbody>
+        <tr><td><code>ruoyi-system</code></td><td>用户/角色/菜单/部门/字典等系统管理</td><td>高</td></tr>
+        <tr><td><code>ruoyi-gen</code></td><td>代码生成器 —— WMS 各模块即由它产出后定制</td><td>高</td></tr>
+        <tr><td><code>ruoyi-wms</code></td><td>仓储管理业务（仓库/库区/储位/货主/商品）</td><td>★ 当前主战场</td></tr>
+        <tr><td><code>ruoyi-workflow</code></td><td>WarmFlow 工作流 + 请假示例</td><td>中</td></tr>
+        <tr><td><code>ruoyi-ai</code></td><td>AI 对话（chat）+ SnailAi</td><td>中</td></tr>
+        <tr><td><code>ruoyi-job</code></td><td>SnailJob 任务调度</td><td>低</td></tr>
+        <tr><td><code>ruoyi-activiti</code></td><td>Activiti 流程引擎集成</td><td>低</td></tr>
+        <tr><td><code>ruoyi-demo</code></td><td>框架示例，可忽略</td><td>低</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>ruoyi-common 里的高频模块</h3>
+  <ul class="plain">
+    <li><code>ruoyi-common-core</code> —— <code>R&lt;T&gt;</code> 统一响应、基础实体、工具类</li>
+    <li><code>ruoyi-common-mybatis</code> —— MyBatis-Plus 配置、BaseMapperX、数据权限插件</li>
+    <li><code>ruoyi-common-satoken</code> / <code>ruoyi-common-security</code> —— 认证与鉴权（<code>@SaCheckPermission</code>）</li>
+    <li><code>ruoyi-common-redis</code> —— Redisson 缓存（Spring Cache 注解体系）</li>
+    <li><code>ruoyi-common-translation</code> —— 字段翻译（<code>@Translate</code>，WMS 大量用于名称翻译）</li>
+    <li>其余：excel / oss / sms / mail / mqtt / elasticsearch / liteflow / mcp / push / sensitive / encrypt / idempotent…</li>
+  </ul>
+</section>
+
+<!-- ==================== WMS 业务现状 ==================== -->
+<section id="wms">
+  <div class="sec-head">
+    <h2 class="sec-title">业务开发现状：WMS</h2>
+    <p class="sec-sub">近期两个仓库的提交几乎全部围绕 WMS 模块与代码生成器模板，从 git log 看这是当前迭代主线。</p>
+  </div>
+
+  <p>已落地的六个标准 CRUD 子模块，均走「代码生成 → 模板定制」路线，每个子模块自带菜单 SQL 与 Mapper XML：</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>子模块</th><th>接口前缀</th><th>权限标识前缀</th></tr></thead>
+      <tbody>
+        <tr><td>仓库管理</td><td><code>/wms/warehouses</code></td><td><code>wms:warehouses:*</code></td></tr>
+        <tr><td>仓储分区</td><td><code>/wms/storageZones</code></td><td><code>wms:storageZones:*</code></td></tr>
+        <tr><td>库位管理</td><td><code>/wms/storageLocations</code></td><td><code>wms:storageLocations:*</code></td></tr>
+        <tr><td>货主管理</td><td><code>/wms/cargoOwners</code></td><td><code>wms:cargoOwners:*</code></td></tr>
+        <tr><td>商品类别（树形）</td><td><code>/wms/productCategories</code></td><td><code>wms:productCategories:*</code></td></tr>
+        <tr><td>商品品牌</td><td><code>/wms/productBrand</code></td><td><code>wms:productBrand:*</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>新增一个 WMS 子模块的固定套路</h3>
+  <ol class="steps">
+    <li><div class="step-title">用 ruoyi-gen 生成骨架</div><p>生成 Controller / Service / Mapper / BO / VO / 前端页面（近期生成器模板已支持模态框类型、树形数据弹窗）。</p></li>
+    <li><div class="step-title">执行菜单 SQL</div><p>位于 <code>ruoyi-wms/src/main/resources/sql/*Menu.sql</code>，执行后后台出现菜单与按钮权限。</p></li>
+    <li><div class="step-title">定制翻译与联动</div><p>外键名称用 <code>@Translate</code> 翻译；库区→仓库、储位→库区等做级联选择（前端已有联动实现可参考）。</p></li>
+    <li><div class="step-title">补前端导入/导出弹窗</div><p>各模块已统一补全导入弹窗，复制现有实现即可。</p></li>
+  </ol>
+</section>
+
+<!-- ==================== 环境搭建 ==================== -->
+<section id="setup">
+  <div class="sec-head">
+    <h2 class="sec-title">环境搭建</h2>
+    <p class="sec-sub">从零到两个服务跑起来，大约半小时。数据库与 Redis 需先向同事确认可用实例。</p>
+  </div>
+
+  <ol class="steps">
+    <li>
+      <div class="step-title">准备基础环境</div>
+      <p>JDK 21 · Maven 3.8+ · Node 22.18+/24 · pnpm 11（<code>npm i -g pnpm@11</code>）· PostgreSQL 14+ · Redis 6+</p>
+    </li>
+    <li>
+      <div class="step-title">初始化数据库</div>
+      <p>新建库 <code>ruoyi-6.x</code>，按顺序执行 <code>RuoYi-Vue-Plus/script/sql/postgres/</code> 下的
+      <code>postgres_ry_vue.sql</code> → <code>postgres_ry_ai.sql</code> → <code>postgres_ry_job.sql</code> → <code>postgres_ry_workflow.sql</code>，
+      再执行 ruoyi-wms 各模块的 <code>*Menu.sql</code>。</p>
+    </li>
+    <li>
+      <div class="step-title">创建 application-local.yml（关键）</div>
+      <p>Maven 默认激活的 profile 是 <b>local</b>，而 <code>application-local.yml</code> 在 .gitignore 中、不入库 ——
+      新环境需要参照 <code>application-dev.yml</code> 手工创建，填入真实的 PostgreSQL / Redis 地址与密码。
+      团队实际连接：PG 与 Redis 均在内网 192.168.30.221（端口 5432 / 6379），找同事要现成文件最快。</p>
+    </li>
+    <li>
+      <div class="step-title">启动后端</div>
+      <p><code>cd RuoYi-Vue-Plus &amp;&amp; mvn spring-boot:run</code> —— 不带 <code>-P</code> 参数时默认就是 local 环境。
+      服务起来后访问 <code>http://localhost:8080</code>、监控台 <code>http://localhost:9090/admin</code>。</p>
+    </li>
+    <li>
+      <div class="step-title">启动前端</div>
+      <p><code>cd bell-plus &amp;&amp; pnpm install &amp;&amp; pnpm dev</code> —— 必须 pnpm，preinstall 里
+      <code>only-allow pnpm</code> 会拦截 npm/yarn。访问 <code>http://localhost:5666</code>。</p>
+    </li>
+  </ol>
+</section>
+
+<!-- ==================== 配置文件 ==================== -->
+<section id="config">
+  <div class="sec-head">
+    <h2 class="sec-title">配置文件地图</h2>
+    <p class="sec-sub">改配置前先知道每个文件管什么，避免在错误的环境里调半天。</p>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>文件</th><th>位置</th><th>管什么</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>application.yml</code></td>
+          <td>ruoyi-admin/resources</td>
+          <td>全局：端口 8080、Sa-Token、api-decrypt RSA 密钥对、MQTT、ES、LiteFlow、SSE</td>
+        </tr>
+        <tr>
+          <td><code>application-local.yml</code></td>
+          <td>ruoyi-admin/resources</td>
+          <td><b>本地真实连接</b>（gitignore）。PG 5432、Redis 6379、监控台账号 —— 当前默认激活环境</td>
+        </tr>
+        <tr>
+          <td><code>application-dev.yml</code></td>
+          <td>ruoyi-admin/resources</td>
+          <td>dev 环境模板：本机 PG localhost:5432/ruoyi-6.x（注释里保留了 MySQL/Oracle/SQLServer 写法），用户名密码留空</td>
+        </tr>
+        <tr>
+          <td><code>application-prod.yml</code></td>
+          <td>ruoyi-admin/resources</td>
+          <td>生产环境</td>
+        </tr>
+        <tr>
+          <td><code>.env.development</code></td>
+          <td>bell-plus</td>
+          <td>前端：VITE_PORT=5666、<code>VITE_GLOB_API_URL=/dev-api</code>、RSA 公私钥、client-id、SSE 开关</td>
+        </tr>
+        <tr>
+          <td><code>vite.config.ts</code></td>
+          <td>bell-plus</td>
+          <td>开发代理：<code>/dev-api → http://127.0.0.1:8080</code>，后端换端口时改这里</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ==================== 常用命令 ==================== -->
+<section id="commands">
+  <div class="sec-head">
+    <h2 class="sec-title">常用命令</h2>
+    <p class="sec-sub">后端在 RuoYi-Vue-Plus/ 下执行，前端在 bell-plus/ 下执行。</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="codeblock">
+      <div class="code-label">后端 · Maven</div>
+      <pre>mvn clean install                <span class="c"># 首次全量构建</span>
+mvn spring-boot:run              <span class="c"># 启动(默认local)</span>
+mvn spring-boot:run -Pdev        <span class="c"># 指定dev环境</span>
+mvn clean package -DskipTests -Pprod
+mvn test -pl ruoyi-common/ruoyi-common-core</pre>
+    </div>
+    <div class="codeblock">
+      <div class="code-label">前端 · pnpm</div>
+      <pre>pnpm install          <span class="c"># 安装依赖(只能pnpm)</span>
+pnpm dev              <span class="c"># 开发 :5666</span>
+pnpm build            <span class="c"># 生产构建</span>
+pnpm build:test       <span class="c"># 测试环境构建</span>
+pnpm typecheck        <span class="c"># vue-tsc 类型检查</span>
+pnpm lint · pnpm format</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 开发规范 ==================== -->
+<section id="conventions">
+  <div class="sec-head">
+    <h2 class="sec-title">开发约定</h2>
+    <p class="sec-sub">三层架构 + 统一响应 + 注解式横切能力，新代码务必与既有风格一致。</p>
+  </div>
+
+  <h3>三层架构与包结构</h3>
+  <div class="codeblock">
+    <div class="code-label">org/dromara/&lt;module&gt;</div>
+    <pre>controller/   <span class="c"># @RestController，只做参数校验与编排</span>
+service/      <span class="c"># 接口 + impl/ 实现，业务逻辑都在这</span>
+mapper/       <span class="c"># MyBatis-Plus Mapper，复杂 SQL 走 XML</span>
+domain/       <span class="c"># 实体；bo/ 入参、vo/ 出参</span></pre>
+  </div>
+
+  <h3>RESTful 路径约定</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>操作</th><th>方法</th><th>路径</th></tr></thead>
+      <tbody>
+        <tr><td>分页查询</td><td>GET</td><td><code>/list</code></td></tr>
+        <tr><td>获取详情</td><td>GET</td><td><code>/{id}</code></td></tr>
+        <tr><td>新增</td><td>POST</td><td><code>/</code></td></tr>
+        <tr><td>修改</td><td>PUT</td><td><code>/</code></td></tr>
+        <tr><td>删除</td><td>DELETE</td><td><code>/{ids}</code></td></tr>
+        <tr><td>导出</td><td>POST</td><td><code>/export</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>高频注解</h3>
+  <div class="codeblock">
+    <div class="code-label">横切能力一律注解声明</div>
+    <pre><span class="a">@SaCheckPermission</span>("wms:warehouses:list")   <span class="c"># 权限</span>
+<span class="a">@Sensitive</span>(strategy = SensitiveStrategy.PHONE)   <span class="c"># 脱敏</span>
+<span class="a">@Translate</span>(table = "sys_user", result = "nickName") <span class="c"># 字段翻译</span>
+<span class="a">@Idempotent</span>(key = "xxx", expire = 5000)          <span class="c"># 幂等</span>
+<span class="a">@Cacheable</span>(value = "sysUser", key = "#userId")    <span class="c"># Redisson 缓存</span></pre>
+  </div>
+
+  <p style="margin-top:14px;">所有接口返回统一包装 <code>R&lt;T&gt;</code>（code 200 为成功），分页返回 <code>TableDataInfo&lt;T&gt;</code>；前端已封装对应解包逻辑，不需要手动判断。</p>
+</section>
+
+<!-- ==================== 提醒 ==================== -->
+<section id="notes">
+  <div class="sec-head">
+    <h2 class="sec-title">常见问题与重要提醒</h2>
+    <p class="sec-sub">新人最容易踩的坑都集中在这里，开工前花两分钟读完。</p>
+  </div>
+
+  <div class="note">
+    <div class="n-title">⚠ 根目录 CLAUDE.md 描述的是另一个项目形态，以本页为准</div>
+    <p>CLAUDE.md 写的是「RuoYi-Plus-UniApp + Element Plus + MySQL + plus.ruoyi 包名 + UniApp 移动端」，但仓库实际是
+    <b>RuoYi-Vue-Plus 6.X（org.dromara 包名）+ bell-plus（antdv-next）+ PostgreSQL，且没有移动端目录</b>。
+    参考文档时以 pom.xml、pnpm-workspace.yaml 和本页为准，建议尽快更新 CLAUDE.md 避免误导后续接手的人（和 AI）。</p>
+  </div>
+
+  <div class="note">
+    <div class="n-title">⚠ docker-compose.dev.yml 里的 MySQL 与实际不符</div>
+    <p>dev compose 起的是 MySQL 8.0.42，但后端实际连接 PostgreSQL。若要用 compose 起本地中间件，需要自行替换为 PG 容器；
+    根目录另有 deploy-ruoyi.sh / docker-build.sh 等部署脚本，使用前先核对数据库类型。</p>
+  </div>
+
+  <div class="note">
+    <div class="n-title">⚠ application-local.yml 的密码已泄露过，建议更换</div>
+    <p>该文件虽已加入 .gitignore，但历史提交中出现过真实 Redis 密码。它只应放在本地、绝不入库；更稳妥的做法是直接改掉已泄露的密码。</p>
+  </div>
+
+  <div class="note">
+    <div class="n-title">✱ 前端只能用 pnpm</div>
+    <p>bell-plus 的 preinstall 钩子是 <code>npx only-allow pnpm</code>，npm / yarn 安装会被直接拦截。Node 版本需 ^22.18.0 或 ^24。</p>
+  </div>
+
+  <div class="note">
+    <div class="n-title">✱ 默认 profile 是 local 不是 dev</div>
+    <p>pom.xml 中 <code>&lt;activeByDefault&gt;</code> 指向 local。裸跑 <code>mvn spring-boot:run</code> 加载的是
+    application-local.yml —— 文件不存在时连接信息全为空，后端起不来但报错不明显，先确认这个文件存在。</p>
+  </div>
+
+  <div class="note">
+    <div class="n-title">✱ 如果确实要用 Docker MySQL：中文乱码预防</div>
+    <p>MySQL 容器必须配置 utf8mb4（my.cnf 的 client/mysql/mysqld 三段 + 后端 UTF-8 encoding + Dockerfile 的
+    <code>-Dfile.encoding=UTF-8</code>），否则中文会存成 Latin1 乱码。修复 SQL 与完整根因分析见根目录 CLAUDE.md「MySQL 中文乱码预防」一节。</p>
+  </div>
+
+  <p class="footer-note">
+    生成于 2026-09-01 · 数据来源：RuoYi-Vue-Plus/pom.xml、bell-plus/pnpm-workspace.yaml、application-*.yml、
+    ruoyi-wms 源码与两仓库近期 git log · 可用 /sync、/progress 命令获取最新状态。
+  </p>
+</section>
+
+</main>

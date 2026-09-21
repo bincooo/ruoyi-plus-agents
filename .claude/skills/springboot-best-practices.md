@@ -1,3 +1,8 @@
+---
+name: springboot-best-practices
+description: 当开发 Spring Boot 应用时使用 —— 配置规范、启动流程、异常处理、企业级实践。
+---
+
 # Spring Boot 最佳实践技能 (Spring Boot Best Practices)
 
 ## 适用场景

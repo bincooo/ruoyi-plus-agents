@@ -1,3 +1,8 @@
+---
+name: devops-ci-cd
+description: 当设计 CI/CD 流水线、Docker 容器化部署或发布自动化时使用。
+---
+
 # DevOps 与 CI/CD 技能 (DevOps and CI/CD Best Practices)
 
 ## 适用场景
@@ -403,7 +408,7 @@ data:
     logging:
       level:
         root: INFO
-        com.ruoyi: DEBUG
+        org.dromara: DEBUG
 ---
 # k8s/secret.yaml
 apiVersion: v1

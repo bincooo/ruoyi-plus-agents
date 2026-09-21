@@ -6,14 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-**RuoYi-Plus-UniApp** 是基于 **RuoYi-Vue-Plus 5.X** 的全栈开发项目，包含 AI 编程助手配置、完整源码和文档系统。
+**RuoYi-Plus-Project** 是基于 **RuoYi-Vue-Plus 5.X** 的全栈开发项目，包含 AI 编程助手配置、完整源码和文档系统。
 
 ### 技术栈
 
 | 模块 | 技术栈 |
 |------|--------|
 | **后端** | Spring Boot 3.5.x + MyBatis-Plus 3.5.16 + Sa-Token 1.44.0 + Redisson 3.52.0 + JDK 17/21 |
-| **前端** | Vue 3.5.x + TypeScript 5.9.x + Element Plus 2.13.x + Vite 7.x + Pinia 3.x |
+| **前端** | Vue 3.5.x + TypeScript 5.9.x + Antdv-Next 1.5.x + Vite 7.x + Pinia 3.x |
 | **移动端** | UniApp 3.x + Vue 3 + UView Plus + wxCropper |
 | **文档** | VitePress 1.6.x + Vue 3 |
 
@@ -22,7 +22,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 目录结构
 
 ```
-ruoyi_plus_uniapp/
+RuoYi-Plus-Project/
 ├── .claude/                          # Claude Code AI 配置
 │   ├── commands/                     # 10 个快捷命令
 │   ├── skills/                       # 40+ 专业技能
@@ -31,7 +31,7 @@ ruoyi_plus_uniapp/
 │   ├── templates/                    # 文档模板
 │   └── docs/                         # 开发文档
 │
-├── ruoyi-plus-uniapp-workflow/       # 后端源码 (Spring Boot 3.5.x)
+├── Ruoyi-Vue-Plus/       # 后端源码 (Spring Boot 3.5.x)
 │   ├── ruoyi-admin/                  # 启动入口模块
 │   ├── ruoyi-common/                 # 22 个通用模块
 │   ├── ruoyi-modules/                # 5 个业务模块
@@ -39,15 +39,10 @@ ruoyi_plus_uniapp/
 │   ├── script/                       # 脚本文件
 │   └── pom.xml                       # Maven 配置
 │
-├── plus-ui/                          # 前端源码 (Vue 3 + Element Plus)
+├── bell-plus/                          # 前端源码 (Vue 3 + Antdv-Next)
 │   ├── src/
 │   ├── package.json
 │   └── vite.config.ts
-│
-├── ruo-yi-uni-app-plus/              # 移动端源码 (UniApp + Vue 3)
-│   ├── src/
-│   ├── package.json
-│   └── vite.config.js
 │
 └── docs/                             # 文档目录（位于 .claude/docs/）
 ```
@@ -98,7 +93,7 @@ ruoyi_plus_uniapp/
 
 ```bash
 # 进入后端目录
-cd ruoyi-plus-uniapp-workflow
+cd RuoYi-Vue-Plus
 
 # 安装依赖 (需要 JDK 17+, Maven 3.8+)
 mvn clean install
@@ -121,47 +116,23 @@ mvn spotless:apply
 
 ```bash
 # 进入前端目录
-cd plus-ui
+cd bell-plus
 
 # 安装依赖 (Node >=20.19.0)
-npm install --registry=https://registry.npmmirror.com
+pnpm install
 
 # 开发模式 (http://localhost:80)
-npm run dev
+pnpm run dev
 
 # 生产构建
-npm run build:prod
+pnpm run build:prod
 
 # 代码检查
-npm run lint:eslint
+pnpm run lint:eslint
 
 # 代码格式化
-npm run prettier
+pnpm run prettier
 ```
-
-### 移动端 (UniApp)
-
-```bash
-# 进入移动端目录
-cd ruo-yi-uni-app-plus
-
-# 安装依赖
-npm install --registry=https://registry.npmmirror.com
-
-# H5 开发
-npm run dev:h5
-
-# 微信小程序开发
-npm run dev:mp-weixin
-
-# 生产构建
-npm run build:h5
-npm run build:mp-weixin
-
-# 类型检查
-npm run type-check
-```
-
 
 ## 快速启动指南
 
@@ -196,7 +167,7 @@ mysql -u root -p < ruoyi-plus-uniapp-workflow/script/sql.sql
 - 修改文件上传路径
 
 # 前端配置
-编辑 plus-ui/.env.development
+编辑 bell-plus/.env.development
 - VITE_APP_BASE_API=/dev-api
 - VITE_APP_BASE_URL=http://localhost:8080
 ```

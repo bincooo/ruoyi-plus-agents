@@ -1,3 +1,8 @@
+---
+name: git-workflow
+description: 当制定 Git 工作流时使用 —— 分支管理、提交规范、PR 流程、版本发布。
+---
+
 # Git Workflow - Git 工作流规范
 
 ## 职责范围
@@ -109,7 +114,7 @@ git commit -m "feat(api): 重构用户 API 接口
 
 变更内容：
 - 将/user/info 改为 GET /users/{id}
-- 响应格式从 AjaxResult 改为统一 DTO
+- 响应格式从 AjaxResult 改为统一 R<T>
 
 BREAKING CHANGE: API 路径变更，前端需要同步更新
 Closes #456"

@@ -1,3 +1,8 @@
+---
+name: architecture-design
+description: 当进行系统架构设计时使用 —— 分层架构（Controller→Service→Mapper）、DDD 边界、模块拆分、架构决策记录（ADR）。
+---
+
 # Architecture Design - 架构设计模式
 
 ## 职责范围
@@ -10,10 +15,12 @@
 
 ### 1. 分层架构
 
-#### 1.1 标准四层架构
+#### 1.1 标准三层架构（无 DAO 层）
+
+> RuoYi-Vue-Plus 采用 **Controller → Service → Mapper** 三层架构（无独立 DAO 层），统一响应使用 `R<T>`，主键为雪花 ID。
 
 ```
-com.ruoyi.module/
+org.dromara.module/
 ├── controller/           # 控制层（Web 层）
 │   ├── UserController.java
 │   └── vo/              # 视图对象
@@ -25,13 +32,8 @@ com.ruoyi.module/
 │   └── impl/
 │       └── UserServiceImpl.java
 │
-├── mapper/              # 数据访问层
-│   └── UserMapper.java
-│
-└── domain/              # 领域模型层
-    ├── User.java
-    └── enums/
-        └── UserStatus.java
+└── mapper/              # 数据访问层
+    └── UserMapper.java
 ```
 
 #### 1.2 各层职责
@@ -52,15 +54,15 @@ public class UserController {
 
     @PostMapping
     @SaCheckPermission("system:user:add")
-    public AjaxResult add(@Validated @RequestBody CreateUserRequest request) {
+    public R<UserVO> add(@Validated @RequestBody CreateUserRequest request) {
         UserVO user = userService.createUser(request);
-        return AjaxResult.success(user);
+        return R.ok(user);
     }
 
     @GetMapping("/{id}")
-    public AjaxResult getById(@PathVariable Long id) {
+    public R<UserVO> getById(@PathVariable Long id) {
         UserVO user = userService.getUserById(id);
-        return AjaxResult.success(user);
+        return R.ok(user);
     }
 }
 
@@ -425,7 +427,7 @@ public class OrderService {
 #### 3.2 包结构设计
 
 ```
-com.ruoyi/
+org.dromara/
 ├── common/               # 公共模块
 │   ├── core/            # 核心工具类
 │   ├── exception/       # 异常处理

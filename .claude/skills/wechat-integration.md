@@ -1,3 +1,8 @@
+---
+name: wechat-integration
+description: 当集成微信生态功能时使用 —— 微信登录、微信分享、消息推送、小程序码生成。
+---
+
 # WeChat Integration - 微信生态集成
 
 ## 职责范围

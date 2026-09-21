@@ -1,3 +1,8 @@
+---
+name: store-bc
+description: 当使用 Pinia 管理前端状态时使用 —— Store 定义、State/Getters/Actions、状态持久化（bell-plus）。
+---
+
 # Store BC - Pinia 状态管理
 
 ## 职责范围
@@ -516,7 +521,6 @@ userStore.$patch({ userInfo: { name: 'new name' } })
 - Pinia
 - 状态管理
 - Store
-- Vuex
 - 全局状态
 
 ---
@@ -524,7 +528,7 @@ userStore.$patch({ userInfo: { name: 'new name' } })
 ## 相关文件
 
 - [vue-best-practices.md](./vue-best-practices.md) - Vue 开发最佳实践
-- [ui-bc.md](./ui-bc.md) - Element Plus 组件封装
+- [ui-bc.md](./ui-bc.md) - antdv-next + vxe-table 组件封装
 - [ui-mobile.md](./ui-mobile.md) - 移动端开发
 
 ---
